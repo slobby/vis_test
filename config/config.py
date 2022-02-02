@@ -1,0 +1,4 @@
+CONVENTIONS = 'conv.txt'
+CONV_ENCODING = 'utf-8'
+CONV_SEP = ';'
+CONV_COMMENT = '#'
