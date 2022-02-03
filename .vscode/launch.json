@@ -5,12 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-node",
+      "name": "Python: Текущий файл",
+      "type": "python",
       "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\t1.js",
-      "args": ["ti_exp.js"]
+      "program": "${file}",
+      "console": "integratedTerminal"
     }
   ]
 }
