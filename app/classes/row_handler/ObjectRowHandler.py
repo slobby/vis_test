@@ -1,5 +1,5 @@
-from exceptions import DublicateKeyException
-from row_handler.AbstractHandler import AbstractRowHandler
+from app.exceptions import DublicateKeyException
+from app.classes.row_handler.AbstractHandler import AbstractRowHandler
 
 
 class ObjectRowHandler(AbstractRowHandler):

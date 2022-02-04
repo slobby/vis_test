@@ -2,6 +2,15 @@
 """Application constants
 """
 
+# Default description file path
+DEF_DESC_PATH = "config/default_description.csv"
+
+# Source description dir
+SOURCE_DESC_DIR = "stations"
+
+# Source description dir
+SOURCE_DESC_SUFIX = "description.csv"
+
 CONVENTIONS = 'conv.txt'
 CONV_ENCODING = 'utf-8'
 CONV_SEP = ';'

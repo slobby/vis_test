@@ -1,5 +1,5 @@
 from pprint import pprint
-from station.Station import Station
+from app.classes.station.Station import Station
 
 
 if __name__ == '__main__':

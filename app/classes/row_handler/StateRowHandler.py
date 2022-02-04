@@ -1,7 +1,8 @@
 from audioop import reverse
-from color.Color import LayerColor
+from app.classes.color.Color import LayerColor
 from constants import COLORS_SEP
-from row_handler.AbstractHandler import AbstractRowHandler
+from app.exceptions import DublicateLayerException, NotFoundKeyException
+from app.classes.row_handler.AbstractHandler import AbstractRowHandler
 
 
 class StateRowHandler(AbstractRowHandler):
@@ -23,13 +24,13 @@ class StateRowHandler(AbstractRowHandler):
                 if id not in station.objects or \
                         layer_color.blink_color not in station.colors or \
                         layer_color.permanent_color not in station.colors:
-                    raise KeyError
+                    raise NotFoundKeyException
                 if id not in station.states:
                     station.states[id] = dict()
                 if state not in station.states[id]:
                     station.states[id][state] = dict()
                 if layer in station.states[id][state]:
-                    raise KeyError
+                    raise DublicateLayerException
                 station.states[id][state][layer] = layer_color
             except ValueError:
                 pass

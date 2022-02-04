@@ -1,5 +1,5 @@
-from exceptions import UnhandledRowException
-from row_handler.AbstractHandler import AbstractRowHandler
+from app.exceptions import UnhandledRowException
+from app.classes.row_handler.AbstractHandler import AbstractRowHandler
 
 
 class UnhandledRowHandler(AbstractRowHandler):
