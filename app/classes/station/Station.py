@@ -1,17 +1,21 @@
 import pathlib
 from constants import DEF_DESC_PATH, SOURCE_DESC_DIR, SOURCE_DESC_SUFIX
-from app.exceptions import DublicateKeyException, DublicateLayerException, UnhandledRowException
+from app.exceptions import DublicateKeyException
+from app.exceptions import DublicateLayerException
+from app.exceptions import UnhandledRowException
 from app.classes.row_handler.ColorRowHandler import ColorRowHandler
 from app.classes.row_handler.ObjectRowHandler import ObjectRowHandler
 from app.classes.row_handler.StateRowHandler import StateRowHandler
 from app.classes.row_handler.UnhandledRowHandler import UnhandledRowHandler
-from constants import CONV_COMMENT, CONV_ENCODING, CONV_SEP, CONVENTIONS
+from constants import CONV_COMMENT, CONV_ENCODING, CONV_SEP
 from logger import get_logger
 
 logger = get_logger(__name__)
 
 
 class Station:
+
+    name: str
     objects: dict[int, set[str]]
     ungatherd_objects: dict[str, int]
     colors: dict[str, set[int]]
@@ -37,9 +41,9 @@ class Station:
         color_handler = ColorRowHandler()
         object_handler = ObjectRowHandler()
         state_handler = StateRowHandler()
-        object_handler.setNext(color_handler)
-        color_handler.setNext(state_handler)
-        state_handler.setNext(UnhandledRowHandler())
+        object_handler.set_next(color_handler)
+        color_handler.set_next(state_handler)
+        state_handler.set_next(UnhandledRowHandler())
 
         with open(path, mode='r', encoding=CONV_ENCODING) as fs:
             for line_no, raw_line in enumerate(fs):
@@ -52,13 +56,17 @@ class Station:
                             object_handler.handle(row, self)
                     except (ValueError, KeyError):
                         logger.error(
-                            f'Error while parsing the row [{row}] in the line line [{line_no + 1}]')
+                            f'Error while parsing the row [{row}] in the \
+line [{line_no + 1}]')
                     except DublicateKeyException:
                         logger.warning(
-                            f'Dublicate value for key in the row [{row}] in the line line [{line_no + 1}]')
+                            f'Dublicate value for key in the row [{row}] in the \
+line [{line_no + 1}]')
                     except DublicateLayerException:
                         logger.warning(
-                            f'Dublicate layer in the row [{row}] in the line line [{line_no + 1}]')
+                            f'Dublicate layer in the row [{row}] in the \
+line [{line_no + 1}]')
                     except UnhandledRowException:
                         logger.error(
-                            f'Couldn`t handle the row [{row}] in the line line [{line_no + 1}]')
+                            f'Couldn`t handle the row [{row}] in the \
+line [{line_no + 1}]')

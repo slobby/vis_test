@@ -8,14 +8,51 @@ DEF_DESC_PATH = "config/default_description.csv"
 # Source description dir
 SOURCE_DESC_DIR = "stations"
 
-# Source description dir
+# Source description file
 SOURCE_DESC_SUFIX = "description.csv"
 
-CONVENTIONS = 'conv.txt'
+# Source output dir
+OUTPUT_DIR = "output"
+
+# Source output postfix
+OUTPUT_FILE_POSTFIX = "_out"
+
+# Source output log postfix
+OUTPUT_FILE_LOG_POSTFIX = "_log"
+
+# Code page for description file
 CONV_ENCODING = 'utf-8'
+
+# Separator for description file
 CONV_SEP = ';'
+
+# Comment sign for description file
 CONV_COMMENT = '#'
+
+# Separator for colors in description file
 COLORS_SEP = ','
+
+# Code page for test files
+TEST_ENCODING = 'utf-8'
+
+# Separator for test files
+TEST_FILE_SEP = ':'
+
+# Log file path
+PROTOCOL_CSV = "log/log.csv"
+
+# Code page for bytes message
+CODE_PAGE = "cp1251"
+
+# the number of maximum attempts for sendins message to visualisation
+MAX_ATTEMPTS = 3
+
+
+CMD_PREFIX = 'CMD'
+
+# Positive answer on sending command to visualisation
+OK_ANSWER = 'OK'
+
 
 # # Buffer size
 # BUFFER = 4096
@@ -50,12 +87,6 @@ COLORS_SEP = ','
 # # Mask for output file
 # OUTPUT_SUFIX = "_out.csv"
 
-# Log file path
-PROTOCOL_CSV = "log/log.csv"
-
-# # Code page
-# CODE_PAGE = "cp1251"
-
 # # prefix to define 'id' records
 # ID_PREFIX = "id?"
 
@@ -73,7 +104,3 @@ PROTOCOL_CSV = "log/log.csv"
 
 # # sufix to define oct number
 # OCT_SUFIX = 'o'
-
-# # the number of unaccepted connections that the app will allow before refusing
-# # new connections
-# MAX_CONN = 5

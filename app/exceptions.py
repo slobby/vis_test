@@ -21,3 +21,15 @@ class UnhandledRowException(VisTestException):
 
 class DublicateLayerException(VisTestException):
     pass
+
+
+class BadResponseExcpetion(Exception):
+    pass
+
+
+class FailedTestException(VisTestException):
+    pass
+
+
+class UnhandledTestRowException(VisTestException):
+    pass

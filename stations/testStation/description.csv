@@ -1,0 +1,29 @@
+
+#типы объектов визуализации:
+#OBJ_ID_SWITCH           1       // стрелка
+#OBJ_ID_SW_SECTION       2       // стрелочная секция !!! У этогообъекта нет графических элементов
+#OBJ_ID_TRACK            3       // путь
+#OBJ_ID_TR_SECTION       4       // участок пути (бесстр. секция)
+#OBJ_ID_TR_BLOCK         5       // блок-участок
+#OBJ_ID_LIGHTS           6       // светофор
+#OBJ_ID_LIGHTS_IN        6       // входной светофор
+#OBJ_ID_LIGHTS_OUT       7       // выходной светофор
+#OBJ_ID_LIGHTS_MAN       8       // маневровый светофор
+#OBJ_ID_LIGHTS_OUTMAN    9       // выходной с маневровым светофор
+#OBJ_ID_ROUTE_CONTROL    10      // маршрутное управление
+#OBJ_ID_RH               11      // район оповещения монтеров пути
+#OBJ_ID_CROSSING         12      // переезд
+#OBJ_ID_CALL             13      // ? вызов ... аккуст. громкоговор. связь
+#OBJ_ID_DIR_BLOCK        16      // блок направления
+#OBJ_ID_SIGNAL_MODE      17      // режим сигналов
+#OBJ_ID_STATION_NAME     18      // ? станция (пока только название)
+#OBJ_ID_DOUBLE_CONTROL   19      // объект двойного контроля
+#OBJ_ID_REPEAT_SIGNAL    20      // повторительный сигнал
+#OBJ_ID_COM_BLOCK        21      // блок связи
+#OBJ_ID_DISCONNECTOR     22      // разъединитель
+#OBJ_ID_STATION          23      // объект "станция"
+#OBJ_ID_BUTTON           24      // кнопка
+
+
+
+

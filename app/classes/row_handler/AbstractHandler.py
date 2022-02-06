@@ -9,5 +9,5 @@ class AbstractRowHandler(ABC):
     def handle(self, row: list[str], station) -> None:
         pass
 
-    def setNext(self, handler: 'AbstractRowHandler') -> None:
+    def set_next(self, handler: 'AbstractRowHandler') -> None:
         self.next_handler = handler

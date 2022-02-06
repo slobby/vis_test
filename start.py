@@ -1,10 +1,6 @@
-from pprint import pprint
-from app.classes.station.Station import Station
+from app.classes.station_test.StationTest import StationTest
 
 
 if __name__ == '__main__':
-    station = Station("test")
-    pprint(station.objects)
-    pprint(station.ungatherd_objects)
-    pprint(station.colors)
-    pprint(station.states)
+    station = StationTest("testStation")
+    station.run()

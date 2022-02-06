@@ -1,3 +1,8 @@
 {
-  "python.analysis.extraPaths": ["./row_handler"]
+  "python.analysis.extraPaths": [
+    "./row_handler"
+  ],
+  "python.linting.pydocstyleEnabled": false,
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true
 }
