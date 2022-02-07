@@ -50,8 +50,14 @@ TIMEOUT = 5
 # Message command perifix
 CMD_PREFIX = 'CMD'
 
+# Message get state perifix
+CMD_PREFIX = 'GET'
+
 # Positive answer on sending command to visualisation
 RESPONSE_OK_ANSWER = 'OK'
+
+# Negative answer on sending command to visualisation
+RESPONSE_NO_ANSWER = 'OK'
 
 # Error answer on sending command to visualisation
 RESPONSE_ERROR_ANSWER = 'ERR_FORMAT'

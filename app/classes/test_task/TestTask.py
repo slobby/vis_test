@@ -37,31 +37,33 @@ class TestTask:
         waiter_handler.set_next(command_handler)
         command_handler.set_next(UnhendledTestRowHandler(self))
         # state_handler.set_next(UnhandledTestRowHandler(self))
-        with open(self.test_path, mode='r', encoding=TEST_ENCODING) as fs:
-            try:
-                for line_no, raw_line in enumerate(fs):
-                    line, _, _ = raw_line.strip(' \n').partition(CONV_COMMENT)
-                    if line:
-                        row = line.split(TEST_FILE_SEP)
-                        if row:
-                            row = [item.strip(' \n') for item in row]
-                            waiter_handler.handle(
-                                row, vis_client)
-            except FailedTestException:
-                self.write_report(self.test_report_path,
-                                  f'Test [{self.test_name}] failed. \
-Details - look [{self.test_log_path} file]')
-                print(f'{self.test_path}::{self.test_name} {Fore.RED}FAILED. \
-Details - look [{self.test_log_path} file]')
-            except UnicodeDecodeError as ex:
-                self.write_report(self.test_log_path,
-                                  f'Test [{self.test_name}] failed. \
+        try:
+            with open(self.test_path, mode='r', encoding=TEST_ENCODING) as fs:
+                try:
+                    for line_no, raw_line in enumerate(fs):
+                        line, _, _ = raw_line.strip(
+                            ' \n').partition(CONV_COMMENT)
+                        if line:
+                            row = line.split(TEST_FILE_SEP)
+                            if row:
+                                row = [item.strip(' \n') for item in row]
+                                waiter_handler.handle(
+                                    row, vis_client)
+                except UnicodeDecodeError as ex:
+                    self.write_report(self.test_log_path,
+                                      f'Test [{self.test_name}] failed. \
 Reason [{ex}]')
-            else:
-                self.write_report(self.test_report_path,
-                                  f'Test [{self.test_name}] passed.')
-                print(f'{Fore.GREEN}Test [{self.test_name}] passed.')
-                return
+                    raise FailedTestException
+        except FailedTestException:
+            self.write_report(self.test_report_path,
+                              f'Test [{self.test_name}] failed. \
+Details - look [{self.test_log_path} file]')
+            print(f'{self.test_name}:: {Fore.RED}FAILED. \
+Details - look [{self.test_log_path} file]')
+        else:
+            self.write_report(self.test_report_path,
+                              f'Test [{self.test_name}] passed.')
+            print(f'{self.test_name}:: {Fore.GREEN}PASSED')
 
     def get_test_name(self) -> str:
         _, _, rest = self.test_path.rpartition(self.station.name)
