@@ -1,4 +1,3 @@
-from audioop import reverse
 from app.classes.color.Color import LayerColor
 from constants import COLORS_SEP
 from app.exceptions import DublicateLayerException, NotFoundKeyException
@@ -11,10 +10,10 @@ class StateRowHandler(AbstractRowHandler):
         if len(row) == 4:
             try:
                 id = int(row[0])
-                state = row[1]
+                state = row[1].lower()
                 layer = int(row[2])
                 colors = row[3].split(COLORS_SEP)
-                colors = [item.strip() for item in colors]
+                colors = [item.strip().lower() for item in colors]
                 if len(colors) != 2:
                     raise ValueError
                 if colors[1] == '':

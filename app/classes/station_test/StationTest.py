@@ -1,22 +1,22 @@
 import os
-import pathlib
 from app.classes.client import send_and_recieve
 from app.classes.test_task.TestTask import TestTask
 from constants import SOURCE_DESC_DIR
 from app.classes.station.Station import Station
+from colorama import Fore, Style
 
 
 class StationTest:
     station: Station
     tasks_path: list[str]
-    tasks: list[TestTask]
+    test_tasks: list[TestTask]
 
     def __init__(self, name, root_dir=None) -> None:
         self.name = name
         self.station = Station(name)
-        self.root_dir = pathlib.Path.joinpath(pathlib.Path.cwd(),
-                                              SOURCE_DESC_DIR,
-                                              root_dir or name)
+        self.root_dir = os.path.join(os.getcwd(),
+                                     SOURCE_DESC_DIR,
+                                     root_dir or name)
         self.tasks_path = self.create_tests_paths()
         self.test_tasks = self.create_tasks()
 
@@ -33,5 +33,9 @@ class StationTest:
                 for task_path in self.tasks_path]
 
     def run(self) -> None:
+        print('============== test session stats ==============')
+        print(f'station {Fore.CYAN}{self.name}')
+        print(f'{Style.BRIGHT}collected {len(self.test_tasks)} items\n')
+
         for test_task in self.test_tasks:
             test_task.run(send_and_recieve)

@@ -44,14 +44,17 @@ PROTOCOL_CSV = "log/log.csv"
 # Code page for bytes message
 CODE_PAGE = "cp1251"
 
-# the number of maximum attempts for sendins message to visualisation
-MAX_ATTEMPTS = 3
+# socket timeout
+TIMEOUT = 5
 
-
+# Message command perifix
 CMD_PREFIX = 'CMD'
 
 # Positive answer on sending command to visualisation
-OK_ANSWER = 'OK'
+RESPONSE_OK_ANSWER = 'OK'
+
+# Error answer on sending command to visualisation
+RESPONSE_ERROR_ANSWER = 'ERR_FORMAT'
 
 
 # # Buffer size

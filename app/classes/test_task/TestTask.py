@@ -1,8 +1,9 @@
-import datetime
+from datetime import datetime
 import os
 from typing import Callable
+import shutil
+from colorama import Fore
 
-from app.classes.client import send_and_recieve
 from app.classes.station.Station import Station
 from app.classes.test_row_handler.CommandTestRowHandler \
     import CommandTestRowHandler
@@ -27,28 +28,40 @@ class TestTask:
         self.test_name = self.get_test_name()
         self.test_report_path = self.get_test_report_path()
         self.test_log_path = self.get_test_log_path()
+        self.clear_output_dir()
 
-    def run(self, handler: Callable) -> None:
-        waiter_handler = WaiterTestRowHandler()
-        command_handler = CommandTestRowHandler()
-        # state_handler = StateTestRowHandler()
+    def run(self, vis_client: Callable) -> None:
+        waiter_handler = WaiterTestRowHandler(self)
+        command_handler = CommandTestRowHandler(self)
+        # state_handler = StateTestRowHandler(self)
         waiter_handler.set_next(command_handler)
-        command_handler.set_next(UnhendledTestRowHandler())
-        # state_handler.set_next(UnhandledTestRowHandler())
+        command_handler.set_next(UnhendledTestRowHandler(self))
+        # state_handler.set_next(UnhandledTestRowHandler(self))
         with open(self.test_path, mode='r', encoding=TEST_ENCODING) as fs:
-            for line_no, raw_line in enumerate(fs):
-                line, _, _ = raw_line.strip(' \n').partition(CONV_COMMENT)
-                if line:
-                    row = line.split(TEST_FILE_SEP)
-                    try:
+            try:
+                for line_no, raw_line in enumerate(fs):
+                    line, _, _ = raw_line.strip(' \n').partition(CONV_COMMENT)
+                    if line:
+                        row = line.split(TEST_FILE_SEP)
                         if row:
                             row = [item.strip(' \n') for item in row]
                             waiter_handler.handle(
-                                row, self, send_and_recieve)
-                    except FailedTestException:
-                        self.write_report(self.test_report_path,
-                                          f'Test [{self.test_name}] failed. \
+                                row, vis_client)
+            except FailedTestException:
+                self.write_report(self.test_report_path,
+                                  f'Test [{self.test_name}] failed. \
 Details - look [{self.test_log_path} file]')
+                print(f'{self.test_path}::{self.test_name} {Fore.RED}FAILED. \
+Details - look [{self.test_log_path} file]')
+            except UnicodeDecodeError as ex:
+                self.write_report(self.test_log_path,
+                                  f'Test [{self.test_name}] failed. \
+Reason [{ex}]')
+            else:
+                self.write_report(self.test_report_path,
+                                  f'Test [{self.test_name}] passed.')
+                print(f'{Fore.GREEN}Test [{self.test_name}] passed.')
+                return
 
     def get_test_name(self) -> str:
         _, _, rest = self.test_path.rpartition(self.station.name)
@@ -69,7 +82,18 @@ Details - look [{self.test_log_path} file]')
                             rest.replace('.csv', '_log.csv'))
 
     def write_report(self, file_path: str, message: str):
+        head, _ = os.path.split(file_path)
+        if not os.path.exists(head):
+            os.makedirs(head)
         with open(file_path, mode='a', encoding=TEST_ENCODING) as fs:
             time_stamp = datetime.now().isoformat(sep=' ',
                                                   timespec='milliseconds')
-            fs.write(f'[{time_stamp}] ; {message}')
+            fs.write(f'[{time_stamp}] ; {message}\n')
+
+    def clear_output_dir(self):
+        to_delete_path = os.path.join(os.getcwd(),
+                                      OUTPUT_DIR,
+                                      self.station.name)
+
+        if (os.path.isdir(to_delete_path)):
+            shutil.rmtree(to_delete_path, ignore_errors=True)

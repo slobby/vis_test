@@ -7,7 +7,7 @@ class ObjectRowHandler(AbstractRowHandler):
         if len(row) == 2:
             try:
                 key = int(row[1])
-                val = row[0]
+                val = row[0].lower()
                 if key not in station.objects:
                     station.objects[key] = set()
                 if val in station.objects[key]:

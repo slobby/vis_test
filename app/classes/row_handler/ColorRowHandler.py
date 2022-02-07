@@ -6,7 +6,7 @@ class ColorRowHandler(AbstractRowHandler):
     def handle(self, row: list[str], station):
         if len(row) == 2:
             try:
-                key = row[1]
+                key = row[1].lower()
                 val = int(row[0])
                 if key not in station.colors:
                     station.colors[key] = set()

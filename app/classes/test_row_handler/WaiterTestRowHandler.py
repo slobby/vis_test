@@ -12,16 +12,13 @@ class WaiterTestRowHandler(AbstractTestRowHandler):
 
     def handle(self,
                row: list[str],
-               test_task,
-               handler: Callable) -> None:
+               vis_client: Callable) -> None:
 
         if len(row) == 1 and row[0].isdigit():
-            self.write_report(
-                test_task.test_log_path,
-                f'Test [{test_task.test_name}] is waiting for [{row[0]}] sec'
-            )
+            self.write_test_log_report(
+                f'Waiting for [{row[0]}] sec')
             time.sleep(int(row[0]))
             return
         else:
             self.next_handler.handle(
-                row, test_task, handler)
+                row, vis_client)

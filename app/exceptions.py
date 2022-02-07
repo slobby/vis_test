@@ -23,13 +23,17 @@ class DublicateLayerException(VisTestException):
     pass
 
 
-class BadResponseExcpetion(Exception):
-    pass
-
-
 class FailedTestException(VisTestException):
     pass
 
 
 class UnhandledTestRowException(VisTestException):
+    pass
+
+
+class BadSendMessageException(VisTestException):
+    pass
+
+
+class BadResponsedMessageException(VisTestException):
     pass
