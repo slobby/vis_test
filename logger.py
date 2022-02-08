@@ -43,7 +43,7 @@ def get_logger(name: str, filename: str = PROTOCOL_CSV) -> logging.Logger:
     """
 
     logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.WARNING)
     logger.addHandler(get_file_handler(filename))
     logger.addHandler(get_stream_handler())
     logger.propagate = False

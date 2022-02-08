@@ -1,12 +1,14 @@
 import socket
 from typing import Callable
 from xmlrpc.client import Boolean
+from app.classes.color.Color import LayerColor
 from app.classes.test_row_handler.AbstractTestRowHandler \
     import AbstractTestRowHandler
 from app.exceptions import BadResponsedMessageException
 from app.exceptions import BadSendMessageException
 from app.exceptions import FailedTestException
-from constants import GET_PREFIX, RESPONSE_ERROR_ANSWER, RESPONSE_NO_ANSWER, RESPONSE_OK_ANSWER
+from constants import COLORS_SEP, GET_PREFIX, RESPONSE_ERROR_ANSWER
+from constants import RESPONSE_NO_ANSWER
 
 from logger import get_logger
 
@@ -57,33 +59,50 @@ in station [{self.test_task.station.name}] model')
             raise BadSendMessageException
         return f'{GET_PREFIX}:{id_object}:{name_object}'
 
-    def is_successful_response(self, response: str,  row: list[str]) -> Boolean:
-        if response == RESPONSE_ERROR_ANSWER or response.endswith(RESPONSE_NO_ANSWER):
+    def is_successful_response(self,
+                               response: str,
+                               row: list[str]) -> Boolean:
+        if response == RESPONSE_ERROR_ANSWER or \
+                response.endswith(RESPONSE_NO_ANSWER):
             return False
         response_items = response.split(':')
         id_object = int(response_items[0])
-        state = row[1].lower()
+        _, _, raw_state = row[1].partition(';')
+        state = raw_state.lower().strip()
+        layers = dict()
+        for record in response_items[2:]:
+            items = record.split(COLORS_SEP)
+            layer = int(items[0])
+            permanent_color = None
+            blink_color = None
+            if len(items) == 2:
+                id_permanent_color = int(items[1])
+                id_blink_color = int(items[1])
+            elif len(items) == 3:
+                id_permanent_color = int(items[2])
+                id_blink_color = int(items[1])
+            else:
+                return False
 
-            layer = int(row[2])
-             colors = row[3].split(COLORS_SEP)
-              colors = [item.strip().lower() for item in colors]
-               if len(colors) != 2:
-                    raise ValueError
-                if colors[1] == '':
-                    colors.reverse()
-                    colors[0] = colors[1]
-                layer_color = LayerColor(*colors)
-                if id not in station.objects or \
-                        layer_color.blink_color not in station.colors or \
-                        layer_color.permanent_color not in station.colors:
-                    raise NotFoundKeyException
+            for color, value in self.test_task.station.colors.items():
+                if id_permanent_color in value:
+                    permanent_color = color
+                    break
+            for color, value in self.test_task.station.colors.items():
+                if id_blink_color in value:
+                    blink_color = color
+                    break
+            if not permanent_color or not blink_color:
+                return False
 
-        excpected_response = f'{message_items[0]}:\
-{message_items[3]}:\
-{RESPONSE_OK_ANSWER}'
-        if (response != excpected_response):
-            self.write_test_log_report(
-                f'Erorr! Bad response on command [{message}]. \
-Expected [{excpected_response}], got [{response}]')
+            layer_color = LayerColor(blink_color, permanent_color)
+            layers[layer] = layer_color
+        if id_object not in self.test_task.station.states:
             return False
+        for lr in self.test_task.station.states[id_object][state]:
+            if lr not in layers:
+                return False
+            if layers[lr] != self.test_task. \
+                    station.states[id_object][state][lr]:
+                return False
         return True

@@ -7,6 +7,8 @@ from colorama import Fore
 from app.classes.station.Station import Station
 from app.classes.test_row_handler.CommandTestRowHandler \
     import CommandTestRowHandler
+from app.classes.test_row_handler.StateTestRowHandler \
+    import StateTestRowHandler
 from app.classes.test_row_handler.UnhandledTestRowHandler \
     import UnhendledTestRowHandler
 from app.classes.test_row_handler.WaiterTestRowHandler \
@@ -33,10 +35,10 @@ class TestTask:
     def run(self, vis_client: Callable) -> None:
         waiter_handler = WaiterTestRowHandler(self)
         command_handler = CommandTestRowHandler(self)
-        # state_handler = StateTestRowHandler(self)
+        state_handler = StateTestRowHandler(self)
         waiter_handler.set_next(command_handler)
-        command_handler.set_next(UnhendledTestRowHandler(self))
-        # state_handler.set_next(UnhandledTestRowHandler(self))
+        command_handler.set_next(state_handler)
+        state_handler.set_next(UnhendledTestRowHandler(self))
         try:
             with open(self.test_path, mode='r', encoding=TEST_ENCODING) as fs:
                 try:

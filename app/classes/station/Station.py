@@ -1,4 +1,5 @@
 import pathlib
+from app.classes.color.Color import LayerColor
 from constants import DEF_DESC_PATH, SOURCE_DESC_DIR, SOURCE_DESC_SUFIX
 from app.exceptions import DublicateKeyException
 from app.exceptions import DublicateLayerException
@@ -19,7 +20,7 @@ class Station:
     objects: dict[int, set[str]]
     ungatherd_objects: dict[str, int]
     colors: dict[str, set[int]]
-    states: dict[int, int]
+    states: dict[int, dict[int, LayerColor]]
 
     def __init__(self, name) -> None:
         self.name = name

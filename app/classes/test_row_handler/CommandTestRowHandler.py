@@ -18,6 +18,7 @@ class CommandTestRowHandler(AbstractTestRowHandler):
     def handle(self,
                row: list[str],
                vis_client: Callable) -> None:
+
         if len(row) == 3 or len(row) == 4:
             try:
                 message = self.get_message_from_row(row)
