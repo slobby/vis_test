@@ -23,13 +23,11 @@ class CommandTestRowHandler(AbstractTestRowHandler):
             try:
                 message = self.get_message_from_row(row)
                 self.write_test_log_report(
-                    f'Test [{self.test_task.test_name}] \
-send message [{message}] to visualisation'
+                    f'Send message [{message}] to visualisation'
                 )
                 response = vis_client(message)
                 self.write_test_log_report(
-                    f'Test [{self.test_task.test_name}] \
-recive message [{response}] from visualisation'
+                    f'Recive message [{response}] from visualisation'
                 )
                 if not self.is_successful_response(response, message):
                     raise BadResponsedMessageException
@@ -37,7 +35,7 @@ recive message [{response}] from visualisation'
                 raise FailedTestException
             except (ConnectionRefusedError, socket.timeout) as ex:
                 self.write_test_log_report(
-                    f'Erorr! While sending message to visualisation [{ex}]')
+                    f'ERROR! While sending message to visualisation [{ex}]')
                 raise FailedTestException
         else:
             self.next_handler.handle(
@@ -55,7 +53,7 @@ recive message [{response}] from visualisation'
             id_object = self.test_task.station.ungatherd_objects[alias_object]
         else:
             self.write_test_log_report(
-                f'Erorr! Couldn`t find object [{alias_object}] \
+                f'ERROR! Couldn`t find object [{alias_object}] \
 in station [{self.test_task.station.name}] model')
             raise BadSendMessageException
         if type_command not in '012':
@@ -70,7 +68,7 @@ in station [{self.test_task.station.name}] model')
 {RESPONSE_OK_ANSWER}'
         if (response != excpected_response):
             self.write_test_log_report(
-                f'Erorr! Bad response on command [{message}]. \
+                f'ERROR! Bad response on command [{message}]. \
 Expected [{excpected_response}], got [{response}]')
             return False
         return True
