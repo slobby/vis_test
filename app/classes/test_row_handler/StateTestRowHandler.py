@@ -44,7 +44,7 @@ class StateTestRowHandler(AbstractTestRowHandler):
 
     def get_message_from_row(self, row: list[str]) -> str:
         alias_object = row[0]
-        name_object, _, _ = row[1].partition(';')
+        name_object, _, state = row[1].partition(';')
         if (alias_object in
             self.test_task.station.ungatherd_objects and
                 self.test_task.station.ungatherd_objects[alias_object] in
@@ -53,6 +53,11 @@ class StateTestRowHandler(AbstractTestRowHandler):
         else:
             self.write_test_log_report(
                 f'ERROR! Couldn`t find object [{alias_object}] \
+in station [{self.test_task.station.name}] model')
+            raise BadSendMessageException
+        if (state not in self.test_task.station.states[id_object]):
+            self.write_test_log_report(
+                f'ERROR! Couldn`t find state [{state}] for object [{alias_object}] \
 in station [{self.test_task.station.name}] model')
             raise BadSendMessageException
         return f'{GET_PREFIX}:{id_object}:{name_object}'

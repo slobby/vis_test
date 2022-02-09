@@ -20,7 +20,7 @@ class Station:
     objects: dict[int, set[str]]
     ungatherd_objects: dict[str, int]
     colors: dict[str, set[int]]
-    states: dict[int, dict[int, LayerColor]]
+    states: dict[int, dict[str, dict[int, LayerColor]]]
 
     def __init__(self, name) -> None:
         self.name = name
