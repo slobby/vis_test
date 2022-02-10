@@ -1,6 +1,5 @@
 import socket
 from typing import Callable
-from xmlrpc.client import Boolean
 from app.classes.test_row_handler.AbstractTestRowHandler \
     import AbstractTestRowHandler
 from app.exceptions import BadResponsedMessageException
@@ -29,14 +28,14 @@ class CommandTestRowHandler(AbstractTestRowHandler):
                 self.write_test_log_report(
                     f'Recive message [{response}] from visualisation'
                 )
-                if not self.is_successful_response(response, message):
-                    raise BadResponsedMessageException
-            except (BadResponsedMessageException, BadSendMessageException):
-                raise FailedTestException
+                self.check_response(response, message)
+            except (BadResponsedMessageException,
+                    BadSendMessageException) as ex:
+                raise FailedTestException(ex.massage)
             except (ConnectionRefusedError, socket.timeout) as ex:
                 self.write_test_log_report(
                     f'ERROR! While sending message to visualisation [{ex}]')
-                raise FailedTestException
+                raise FailedTestException()
         else:
             self.next_handler.handle(
                 row, vis_client)
@@ -52,23 +51,24 @@ class CommandTestRowHandler(AbstractTestRowHandler):
                 self.test_task.station.objects):
             id_object = self.test_task.station.ungatherd_objects[alias_object]
         else:
-            self.write_test_log_report(
-                f'ERROR! Couldn`t find object [{alias_object}] \
-in station [{self.test_task.station.name}] model')
-            raise BadSendMessageException
+            message = f'ERROR! Couldn`t find object [{alias_object}] \
+in station model [{self.test_task.station.name}]'
+            self.write_test_log_report(message)
+            raise BadSendMessageException(message)
         if type_command not in '012':
-            raise BadSendMessageException
+            message = f'ERROR! Wrong command type [{type_command}]'
+            self.write_test_log_report(message)
+            raise BadSendMessageException(message)
         return f'{CMD_PREFIX}:{id_object}:\
 {name_object}:{name_command}:{type_command}'
 
-    def is_successful_response(self, response: str, message: str) -> Boolean:
-        message_items = message.split(':')
-        excpected_response = f'{message_items[0]}:\
-{message_items[3]}:\
+    def check_response(self, response: str, request: str) -> None:
+        request = request.split(':')
+        excpected_response = f'{request[0]}:\
+{request[3]}:\
 {RESPONSE_OK_ANSWER}'
         if (response != excpected_response):
-            self.write_test_log_report(
-                f'ERROR! Bad response on command [{message}]. \
+            message = self.write_test_log_report(
+                f'ERROR! Bad response on command [{request}]. \
 Expected [{excpected_response}], got [{response}]')
-            return False
-        return True
+            raise BadResponsedMessageException(message)

@@ -1,6 +1,5 @@
 import socket
 from typing import Callable
-from xmlrpc.client import Boolean
 from app.classes.color.Color import LayerColor
 from app.classes.test_row_handler.AbstractTestRowHandler \
     import AbstractTestRowHandler
@@ -30,14 +29,14 @@ class StateTestRowHandler(AbstractTestRowHandler):
                 self.write_test_log_report(
                     f'Recive message [{response}] from visualisation'
                 )
-                if not self.is_successful_response(response, row):
-                    raise BadResponsedMessageException
-            except (BadResponsedMessageException, BadSendMessageException):
-                raise FailedTestException
+                self.check_responsee(response, row)
+            except (BadResponsedMessageException,
+                    BadSendMessageException) as ex:
+                raise FailedTestException(ex.message)
             except (ConnectionRefusedError, socket.timeout) as ex:
                 self.write_test_log_report(
                     f'ERROR! While sending message to visualisation [{ex}]')
-                raise FailedTestException
+                raise FailedTestException(f'{ex}')
         else:
             self.next_handler.handle(
                 row, vis_client)
@@ -51,20 +50,20 @@ class StateTestRowHandler(AbstractTestRowHandler):
                 self.test_task.station.objects):
             id_object = self.test_task.station.ungatherd_objects[alias_object]
         else:
-            self.write_test_log_report(
-                f'ERROR! Couldn`t find object [{alias_object}] \
-in station [{self.test_task.station.name}] model')
-            raise BadSendMessageException
+            message = f'ERROR! Couldn`t find object [{alias_object}] \
+in station model [{self.test_task.station.name}]'
+            self.write_test_log_report(message)
+            raise BadSendMessageException(message)
         if (state not in self.test_task.station.states[id_object]):
-            self.write_test_log_report(
-                f'ERROR! Couldn`t find state [{state}] for object [{alias_object}] \
-in station [{self.test_task.station.name}] model')
-            raise BadSendMessageException
+            message = f'ERROR! Couldn`t find state [{state}] for object [{alias_object}] \
+in station model [{self.test_task.station.name}]'
+            self.write_test_log_report(message)
+            raise BadSendMessageException(message)
         return f'{GET_PREFIX}:{id_object}:{name_object}'
 
-    def is_successful_response(self,
-                               response: str,
-                               row: list[str]) -> Boolean:
+    def check_response(self,
+                       response: str,
+                       row: list[str]) -> None:
         if response == RESPONSE_ERROR_ANSWER or \
                 response.endswith(RESPONSE_NO_ANSWER):
             self.write_test_log_report(
@@ -87,10 +86,10 @@ in station [{self.test_task.station.name}] model')
                 id_permanent_color = int(items[2])
                 id_blink_color = int(items[1])
             else:
-                self.write_test_log_report(
-                    f'ERROR! Got wrong amount of \
-object`s colors [{len(items)}]')
-                return False
+                message = f'ERROR! Got wrong amount of \
+object`s colors [{len(items)}]'
+                self.write_test_log_report(message)
+                raise BadResponsedMessageException(message)
 
             for color, value in self.test_task.station.colors.items():
                 if id_permanent_color in value:
@@ -101,32 +100,31 @@ object`s colors [{len(items)}]')
                     blink_color = color
                     break
             if not permanent_color or not blink_color:
-                self.write_test_log_report(
-                    f'ERROR! Couldn`t find color [{id_permanent_color}] \
- or [{id_blink_color}] in station.colors')
-                return False
+                message = f'ERROR! Couldn`t find color [{id_permanent_color}] \
+ or [{id_blink_color}] in station.colors'
+                self.write_test_log_report(message)
+                raise BadResponsedMessageException(message)
 
             layer_color = LayerColor(blink_color, permanent_color)
             layers[layer] = layer_color
         if id_object not in self.test_task.station.states:
-            self.write_test_log_report(
-                f'ERROR! Couldn`t find object [{id_object}] \
-in station.objects')
-            return False
+            message = f'ERROR! Couldn`t find object [{id_object}] \
+in station.objects'
+            self.write_test_log_report(message)
+            raise BadResponsedMessageException(message)
         for lr in self.test_task.station.states[id_object][state]:
             if lr not in layers:
-                self.write_test_log_report(
-                    f'ERROR! Couldn`t find layer [{lr}] \
-in station.states for state [{state}] ')
-                return False
+                message = f'ERROR! Couldn`t find layer [{lr}] \
+in station.states for state [{state}]'
+                self.write_test_log_report(message)
+                raise BadResponsedMessageException(message)
             if layers[lr] != (
                     self.test_task.station.states[id_object][state][lr]):
-                self.write_test_log_report(
-                    f'ERROR! For \
+                message = f'ERROR! For \
 objects [{self.test_task.station.objects[id_object]}] in \
 state [{state}] \
 for layer [{lr}] expected state \
 is [{self.test_task.station.states[id_object][state][lr]}], \
-got [{layers[lr]}]')
-                return False
-        return True
+got [{layers[lr]}]'
+                self.write_test_log_report(message)
+                raise BadResponsedMessageException(message)

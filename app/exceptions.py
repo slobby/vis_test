@@ -4,7 +4,10 @@
 #         self.message = f'Wrong data length = {data_len}'
 
 class VisTestException(Exception):
-    pass
+    message: str = None
+
+    def __init__(self, message=None):
+        self.message = message
 
 
 class DublicateKeyException(VisTestException):
@@ -32,8 +35,10 @@ class UnhandledTestRowException(VisTestException):
 
 
 class BadSendMessageException(VisTestException):
-    pass
+    def __init__(self, message=None):
+        super().__init__(message)
 
 
 class BadResponsedMessageException(VisTestException):
-    pass
+    def __init__(self, message=None):
+        super().__init__(message)

@@ -32,7 +32,7 @@ class TestTask:
         self.test_log_path = self.get_test_log_path()
         self.clear_output_dir()
 
-    def run(self, vis_client: Callable) -> None:
+    def run(self, vis_client: Callable) -> bool:
         waiter_handler = WaiterTestRowHandler(self)
         command_handler = CommandTestRowHandler(self)
         state_handler = StateTestRowHandler(self)
@@ -55,19 +55,28 @@ class TestTask:
                     self.write_report(self.test_log_path,
                                       f'Test [{self.test_name}] failed. \
 Reason [{ex}]')
-                    raise FailedTestException
-        except FailedTestException:
+                    raise FailedTestException()
+        except FailedTestException as ex:
+            message = f'{self.station.name}::{self.test_name}::\
+{Fore.RED}FAILED{Fore.WHITE}::line {line_no} [{line}]. {ex.message}'
+
             self.write_report(self.test_report_path,
-                              f'Test [{self.test_name}] failed. \
-Details - look [{self.test_log_path} file]')
-            print(f'{self.test_name}:: {Fore.RED}FAILED. \
-Details - look [{self.test_log_path} file]')
+                              f'{self.station.name}::{self.test_name}::\
+FAILED{Fore.WHITE}:: line {line_no} [{line}]. {ex.message }')
+            print(message)
+            return False
         else:
             self.write_report(self.test_report_path,
-                              f'Test [{self.test_name}] passed.')
+                              f'{self.test_name}:: {Fore.GREEN}PASSED')
             print(f'{self.test_name}:: {Fore.GREEN}PASSED')
+            return True
 
     def get_test_name(self) -> str:
+        with open(self.test_path, mode='r', encoding=TEST_ENCODING) as fs:
+            first_line = fs.readline()
+            if first_line.startswith(CONV_COMMENT):
+                _, _, test_name = first_line.partition(CONV_COMMENT)
+                return test_name.strip(' \n')
         _, _, rest = self.test_path.rpartition(self.station.name)
         return '_'.join([self.station.name, *rest.split(os.sep)])
 

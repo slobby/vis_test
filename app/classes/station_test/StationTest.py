@@ -32,10 +32,10 @@ class StationTest:
         return [TestTask(task_path, self.station)
                 for task_path in self.tasks_path]
 
-    def run(self) -> None:
+    def run(self) -> bool:
         print('============== test session stats ==============')
         print(f'station {Fore.CYAN}{self.name}')
         print(f'{Style.BRIGHT}collected {len(self.test_tasks)} items\n')
 
-        for test_task in self.test_tasks:
-            test_task.run(send_and_recieve)
+        return all([test_task.run(send_and_recieve)
+                    for test_task in self.test_tasks])
