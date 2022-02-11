@@ -1,6 +1,6 @@
 import os
 from app.classes.client import send_and_recieve
-from app.classes.test_task.TestTask import TestTask
+from app.classes.test_task.VisTestTask import TestTask, VisTestTask
 from constants import SOURCE_DESC_DIR
 from app.classes.station.Station import Station
 from colorama import Fore, Style
@@ -29,7 +29,7 @@ class StationTest:
                 if file.startswith('test')]
 
     def create_tasks(self) -> None:
-        return [TestTask(task_path, self.station)
+        return [VisTestTask(task_path, self.station)
                 for task_path in self.tasks_path]
 
     def run(self) -> bool:

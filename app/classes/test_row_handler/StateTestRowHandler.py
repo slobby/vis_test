@@ -29,7 +29,7 @@ class StateTestRowHandler(AbstractTestRowHandler):
                 self.write_test_log_report(
                     f'Recive message [{response}] from visualisation'
                 )
-                self.check_responsee(response, row)
+                self.check_response(response, row)
             except (BadResponsedMessageException,
                     BadSendMessageException) as ex:
                 raise FailedTestException(ex.message)
