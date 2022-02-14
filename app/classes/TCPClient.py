@@ -41,9 +41,9 @@ class TCPClient():
             if self._con_attempts <= 0:
                 raise TCPConnectionError()
         except TCPConnectionError:
-            raise TCPConnectionError(f'ERROR! Couldn`t establish connection \
-on {self._host}, {self._port} for {CON_ATTEMPTS} times')
-        except Exception:
+            raise TCPConnectionError(f'ERROR! Couldn`t establish a connection \
+on {self._host}, {self._port} in {CON_ATTEMPTS} attempts')
+        except (ConnectionRefusedError, socket.timeout):
             if self._con_attempts > 0:
                 self._con_attempts -= 1
                 self._reconnect()
@@ -80,7 +80,7 @@ message [{message}]')
     def receive(self) -> str:
         try:
             if self._sock:
-                response = str(self.sock.recv(1024), CODE_PAGE).strip(' \r\n')
+                response = str(self._sock.recv(1024), CODE_PAGE).strip(' \r\n')
                 logger.info(
                     f'Recieve from [{self._host}, {self._port}] \
 message [{response}]')

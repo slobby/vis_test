@@ -2,7 +2,7 @@ from app.classes.TCPClient import TCPClient
 from app.classes.color.Color import LayerColor
 from app.classes.test_row_handler.AbstractTestRowHandler \
     import AbstractTestRowHandler
-from app.exceptions import BadResponsedMessageException
+from app.exceptions import BadResponsedMessageException, TCPConnectionError
 from app.exceptions import BadSendMessageException
 from app.exceptions import FailedTestException
 from constants import COLORS_SEP, GET_PREFIX, RESPONSE_ERROR_ANSWER
@@ -25,7 +25,7 @@ class StateTestRowHandler(AbstractTestRowHandler):
                 response = client.receive()
                 self.check_response(response, row)
             except (BadResponsedMessageException,
-                    BadSendMessageException) as ex:
+                    BadSendMessageException, TCPConnectionError) as ex:
                 raise FailedTestException(ex.message)
         else:
             self.next_handler.handle(

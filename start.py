@@ -7,6 +7,7 @@ from app.classes.TCPClient import TCPClient
 from app.classes.station.Station import Station
 
 from app.classes.station_test.StationTest import StationTest
+from app.exceptions import TCPConnectionError
 from constants import CONFIG, VIS_TEST_VERBOSE, VIS_TEST_VERBOSE_YES
 from logger import get_logger
 
@@ -34,6 +35,8 @@ def main(config_file, tests, fixtures, verbose):
         station_test = StationTest(station, client, tests, fixtures)
         if station_test.run():
             sys.exit(0)
+    except TCPConnectionError as ex:
+        logger.error(ex.message)
     except Exception:
         logger.error('ERROR! Unhandled exception', exc_info=True)
     sys.exit(1)

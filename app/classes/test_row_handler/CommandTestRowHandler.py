@@ -25,7 +25,7 @@ class CommandTestRowHandler(AbstractTestRowHandler):
                 self.check_response(response, message)
             except (BadResponsedMessageException,
                     BadSendMessageException, TCPConnectionError) as ex:
-                raise FailedTestException(ex.massage)
+                raise FailedTestException(ex.message)
         else:
             self.next_handler.handle(
                 row, client)

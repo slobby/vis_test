@@ -53,7 +53,7 @@ Reason [{ex}]')
 
             self.write_report(self.test_report_path,
                               f'{self.station.name}::{self.test_name}::\
-FAILED{Fore.WHITE}:: line {line_no} [{line}]. {ex.message }')
+FAILED:: line {line_no} [{line}]. {ex.message }')
             print(message)
             return False
         else:

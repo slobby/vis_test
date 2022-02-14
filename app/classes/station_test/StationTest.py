@@ -70,4 +70,4 @@ class StationTest:
                     if not fixture_task.run():
                         result = False
                         return result
-        return True
+        return result
