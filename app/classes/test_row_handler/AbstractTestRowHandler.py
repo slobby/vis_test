@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 import os
-from typing import Callable
+from app.classes.TCPClient import TCPClient
 
 from constants import TEST_ENCODING
 
@@ -16,7 +16,7 @@ class AbstractTestRowHandler(ABC):
     @abstractmethod
     def handle(self,
                row: list[str],
-               vis_client: Callable) -> None:
+               client: TCPClient) -> None:
         pass
 
     def set_next(self, handler: 'AbstractTestRowHandler') -> None:

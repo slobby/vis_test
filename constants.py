@@ -2,6 +2,9 @@
 """Application constants
 """
 
+# Config description dir path
+CONFIG = "config"
+
 # Default description file path
 DEF_DESC_PATH = "config/default_description.csv"
 
@@ -45,7 +48,10 @@ PROTOCOL_CSV = "log/log.csv"
 CODE_PAGE = "cp1251"
 
 # socket timeout
-TIMEOUT = 5
+TIMEOUT = 1
+
+# Amount of reconnecting attempts
+CON_ATTEMPTS = 5
 
 # Message command perifix
 CMD_PREFIX = 'CMD'
@@ -61,3 +67,9 @@ RESPONSE_NO_ANSWER = 'NO'
 
 # Error answer on sending command to visualisation
 RESPONSE_ERROR_ANSWER = 'ERR_FORMAT'
+
+# Enviroment key for verbose mode (YES/NO)
+VIS_TEST_VERBOSE = "VIS_TEST_VERBOSE"
+
+# Enable verbose mode
+VIS_TEST_VERBOSE_YES = "YES"

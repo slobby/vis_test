@@ -1,5 +1,5 @@
-from typing import Callable
 from colorama import Fore
+from app.classes.TCPClient import TCPClient
 
 from app.classes.station.Station import Station
 from app.classes.test_row_handler.CommandTestRowHandler \
@@ -17,10 +17,13 @@ from constants import CONV_COMMENT, TEST_ENCODING, TEST_FILE_SEP
 
 class VisTestTask(TestTask):
 
-    def __init__(self, test_path: str, station: Station) -> None:
-        super().__init__(test_path, station)
+    def __init__(self,
+                 test_path: str,
+                 station: Station,
+                 client: TCPClient) -> None:
+        super().__init__(test_path, station, client)
 
-    def run(self, vis_client: Callable) -> bool:
+    def run(self) -> bool:
         waiter_handler = WaiterTestRowHandler(self)
         command_handler = CommandTestRowHandler(self)
         state_handler = StateTestRowHandler(self)
@@ -38,7 +41,7 @@ class VisTestTask(TestTask):
                             if row:
                                 row = [item.strip(' \n') for item in row]
                                 waiter_handler.handle(
-                                    row, vis_client)
+                                    row, self.client)
                 except UnicodeDecodeError as ex:
                     self.write_report(self.test_log_path,
                                       f'Test [{self.test_name}] failed. \

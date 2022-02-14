@@ -1,5 +1,4 @@
-import socket
-from typing import Callable
+from app.classes.TCPClient import TCPClient
 from app.classes.color.Color import LayerColor
 from app.classes.test_row_handler.AbstractTestRowHandler \
     import AbstractTestRowHandler
@@ -18,28 +17,19 @@ class StateTestRowHandler(AbstractTestRowHandler):
 
     def handle(self,
                row: list[str],
-               vis_client: Callable) -> None:
+               client: TCPClient) -> None:
         if len(row) == 2 and (';' in row[1]):
             try:
                 message = self.get_message_from_row(row)
-                self.write_test_log_report(
-                    f'Send message [{message}] to visualisation'
-                )
-                response = vis_client(message)
-                self.write_test_log_report(
-                    f'Recive message [{response}] from visualisation'
-                )
+                client.send(message)
+                response = client.receive()
                 self.check_response(response, row)
             except (BadResponsedMessageException,
                     BadSendMessageException) as ex:
                 raise FailedTestException(ex.message)
-            except (ConnectionRefusedError, socket.timeout) as ex:
-                self.write_test_log_report(
-                    f'ERROR! While sending message to visualisation [{ex}]')
-                raise FailedTestException(f'{ex}')
         else:
             self.next_handler.handle(
-                row, vis_client)
+                row, client)
 
     def get_message_from_row(self, row: list[str]) -> str:
         alias_object = row[0]

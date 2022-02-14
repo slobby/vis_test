@@ -2,6 +2,7 @@ from datetime import datetime
 import os
 from typing import Callable
 from abc import ABC, abstractmethod
+from app.classes.TCPClient import TCPClient
 
 from app.classes.station.Station import Station
 from constants import CONV_COMMENT, OUTPUT_DIR, TEST_ENCODING
@@ -14,9 +15,13 @@ class TestTask(ABC):
     test_report_path: str
     test_log_path: str
 
-    def __init__(self, test_path: str, station: Station) -> None:
+    def __init__(self,
+                 test_path: str,
+                 station: Station,
+                 client: TCPClient) -> None:
         self.test_path = test_path
         self.station = station
+        self.client = client
         self.test_name = self.get_test_name()
         self.test_report_path = self.get_test_report_path()
         self.test_log_path = self.get_test_log_path()

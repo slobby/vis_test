@@ -3,6 +3,13 @@
 #     def __init__(self, data_len: int) -> None:
 #         self.message = f'Wrong data length = {data_len}'
 
+class TCPConnectionError(Exception):
+    message: str = None
+
+    def __init__(self, message=None):
+        self.message = message
+
+
 class VisTestException(Exception):
     message: str = None
 

@@ -1,5 +1,5 @@
 import time
-from typing import Callable
+from app.classes.TCPClient import TCPClient
 from app.classes.test_row_handler.AbstractTestRowHandler \
     import AbstractTestRowHandler
 from logger import get_logger
@@ -12,7 +12,7 @@ class WaiterTestRowHandler(AbstractTestRowHandler):
 
     def handle(self,
                row: list[str],
-               vis_client: Callable) -> None:
+               client: TCPClient) -> None:
 
         if len(row) == 1 and row[0].isdigit():
             self.write_test_log_report(
@@ -21,4 +21,4 @@ class WaiterTestRowHandler(AbstractTestRowHandler):
             return
         else:
             self.next_handler.handle(
-                row, vis_client)
+                row, client)
