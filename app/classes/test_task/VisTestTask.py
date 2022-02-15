@@ -46,7 +46,7 @@ class VisTestTask(TestTask):
                     self.write_report(self.test_log_path,
                                       f'Test [{self.test_name}] failed. \
 Reason [{ex}]')
-                    raise FailedTestException()
+                    raise FailedTestException('Encoding exception')
         except FailedTestException as ex:
             message = f'{self.station.name}::{self.test_name}::\
 {Fore.RED}FAILED{Fore.WHITE}::line {line_no} [{line}]. {ex.message}'

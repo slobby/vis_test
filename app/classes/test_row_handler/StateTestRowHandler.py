@@ -44,6 +44,10 @@ class StateTestRowHandler(AbstractTestRowHandler):
 in station model [{self.test_task.station.name}]'
             self.write_test_log_report(message)
             raise BadSendMessageException(message)
+        if id_object not in self.test_task.station.states:
+            message = f'ERROR! Couldn`t object [{alias_object}] in states'
+            self.write_test_log_report(message)
+            raise BadSendMessageException(message)
         if (state not in self.test_task.station.states[id_object]):
             message = f'ERROR! Couldn`t find state [{state}] for object [{alias_object}] \
 in station model [{self.test_task.station.name}]'
@@ -56,9 +60,9 @@ in station model [{self.test_task.station.name}]'
                        row: list[str]) -> None:
         if response == RESPONSE_ERROR_ANSWER or \
                 response.endswith(RESPONSE_NO_ANSWER):
-            self.write_test_log_report(
-                f'ERROR! Got bad responce [{response}]')
-            return False
+            message = f'ERROR! Got bad responce [{response}]'
+            self.write_test_log_report(message)
+            raise BadResponsedMessageException(message)
         response_items = response.split(':')
         id_object = int(response_items[0])
         _, _, raw_state = row[1].partition(';')

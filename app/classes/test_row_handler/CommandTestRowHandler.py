@@ -53,12 +53,12 @@ in station model [{self.test_task.station.name}]'
 {name_object}:{name_command}:{type_command}'
 
     def check_response(self, response: str, request: str) -> None:
-        request = request.split(':')
-        excpected_response = f'{request[0]}:\
-{request[3]}:\
+        list_request = request.split(':')
+        excpected_response = f'{list_request[0]}:\
+{list_request[3]}:\
 {RESPONSE_OK_ANSWER}'
         if (response != excpected_response):
-            message = self.write_test_log_report(
-                f'ERROR! Bad response on command [{request}]. \
-Expected [{excpected_response}], got [{response}]')
+            message = f'ERROR! Bad response on command [{request}]. \
+Expected [{excpected_response}], got [{response}]'
+            self.write_test_log_report(message)
             raise BadResponsedMessageException(message)
