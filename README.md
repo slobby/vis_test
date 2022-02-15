@@ -4,19 +4,11 @@
 
 - [VIS_tester](#vis_tester)
   - [Сontent](#сontent)
-    - [The stucture what you need to know](#the-stucture-what-you-need-to-know)
   - [How to config](#how-to-config)
-    - [File config/config[N].py](#file-configconfignpy)
-    - [File config/default_description.csv](#file-configdefault_descriptioncsv)
-    - [File stations/STATION/description.csv](#file-stationsstationdescriptioncsv)
-    - [File stations/STATION/\*\*/test\*.csv](#file-stationsstationtestcsv)
   - [How to use](#how-to-use)
   - [Requirements](#requirements)
-      - [Windows](#windows)
-      - [Linux](#linux)
   - [CLI command](#cli-command)
   - [See the results](#see-the-results)
-    - [Directory output](#directory-output)
   - [See log](#see-log)
 
 ### The stucture what you need to know
