@@ -100,14 +100,14 @@ run `pyp install -r requirements.txt`
 ## CLI command
 
 ```
-Usage: start.py [OPTIONS]\
+Usage: start.py [OPTIONS]
 
-Options:\
-  -c, --config TEXT   Config file name.\
-  -t, --test TEXT     Test file name in station folder. Can be multiple.\
-  -f, --fixture TEXT  Test file execuded before every test file.\
-  -v, --verbose       Show more info.\
-  --help              Show this message and exit.\
+Options:
+  -c, --config TEXT   Config file name.
+  -t, --test TEXT     Test file name in station folder. Can be multiple.
+  -f, --fixture TEXT  Test file execuded before every test file.
+  -v, --verbose       Show more info.
+  --help              Show this message and exit.
 ```
 
 ## See the results
