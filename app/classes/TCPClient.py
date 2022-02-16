@@ -79,7 +79,6 @@ message [{message}]')
 
     def receive(self) -> str:
         try:
-            # time.sleep(0.5)
             if self._sock:
                 response = str(self._sock.recv(1024), CODE_PAGE).strip(' \r\n')
                 logger.info(

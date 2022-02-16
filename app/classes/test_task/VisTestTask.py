@@ -33,7 +33,7 @@ class VisTestTask(TestTask):
         try:
             with open(self.test_path, mode='r', encoding=TEST_ENCODING) as fs:
                 try:
-                    for line_no, raw_line in enumerate(fs):
+                    for line_no, raw_line in enumerate(fs, start=1):
                         line, _, _ = raw_line.strip(
                             ' \n').partition(CONV_COMMENT)
                         if line:

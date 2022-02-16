@@ -48,7 +48,7 @@ PROTOCOL_CSV = "log/log.csv"
 CODE_PAGE = "cp1251"
 
 # socket timeout
-TIMEOUT = 1
+TIMEOUT = 5
 
 # Amount of reconnecting attempts
 CON_ATTEMPTS = 5

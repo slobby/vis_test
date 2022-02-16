@@ -58,7 +58,9 @@ class StationTest:
                 for task_path in self.fixtures_paths]
 
     def run(self) -> bool:
+        success = 0
         result = True
+        fixture_result = True
         print('============== test session stats ==============')
         print(f'station {Fore.CYAN}{self.name}')
         print(f'{Style.BRIGHT}collected {len(self.test_tasks)} items\n')
@@ -68,6 +70,13 @@ class StationTest:
                 result = False
                 for fixture_task in self.fixtures_tasks:
                     if not fixture_task.run():
-                        result = False
-                        return result
+                        fixture_result = False
+                        break
+            else:
+                success += 1
+            if not fixture_result:
+                break
+        print('===================== REPORT ===================')
+        print(f'{Fore.GREEN}PASSED:{Style.BRIGHT}{success}')
+        print(f'{Fore.RED}FAILED:{Style.BRIGHT}{len(self.test_tasks)-success}')
         return result
