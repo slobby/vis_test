@@ -1,6 +1,5 @@
 from datetime import datetime
 import os
-from typing import Callable
 from abc import ABC, abstractmethod
 from app.classes.TCPClient import TCPClient
 
@@ -28,7 +27,7 @@ class TestTask(ABC):
         self.clear_output_dir()
 
     @abstractmethod
-    def run(self, vis_client: Callable) -> bool:
+    def run(self) -> bool:
         pass
 
     def get_test_name(self) -> str:

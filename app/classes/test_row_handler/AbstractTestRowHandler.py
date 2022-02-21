@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 import os
-from app.classes.TCPClient import TCPClient
 
 from constants import TEST_ENCODING
+from logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class AbstractTestRowHandler(ABC):
@@ -14,9 +16,7 @@ class AbstractTestRowHandler(ABC):
         self.test_task = test_task
 
     @abstractmethod
-    def handle(self,
-               row: list[str],
-               client: TCPClient) -> None:
+    def handle(self, row: list[str]) -> None:
         pass
 
     def set_next(self, handler: 'AbstractTestRowHandler') -> None:
@@ -29,10 +29,10 @@ class AbstractTestRowHandler(ABC):
         with open(file_path, mode='a+', encoding=TEST_ENCODING) as fs:
             time_stamp = datetime.now().isoformat(sep=' ',
                                                   timespec='milliseconds')
-            fs.write(f'[{time_stamp}] ; {message}\n')
+            fs.write(f'[{time_stamp}] - {message}\n')
 
     def write_test_log_report(self, message: str) -> None:
-        return self.write_report(self.test_task.test_log_path, message)
+        self.write_report(self.test_task.test_log_path, message)
 
     def write_test_report(self, message: str) -> None:
-        return self.write_report(self.test_task.test_report_path, message)
+        self.write_report(self.test_task.test_report_path, message)
