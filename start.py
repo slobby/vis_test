@@ -17,9 +17,11 @@ init(autoreset=True)
 @click.option('-f', '--fixture', 'fixtures', multiple=True,
               help='Test files executed after every failed test. \
 Can be multiple.')
+@click.option('-r', '--repeat', 'repeat', default=1,
+              help='Set repeat tests (if they are succssesful).')
 @click.option('-v', '--verbose', is_flag=True,
               help='Show more info.')
-def main(config_file, tests, fixtures, verbose):
+def main(config_file, tests, fixtures, repeat, verbose):
     if verbose:
         os.environ[VIS_TEST_VERBOSE] = VIS_TEST_VERBOSE_YES
     from app.classes.TCPClient import TCPClient
@@ -34,8 +36,12 @@ def main(config_file, tests, fixtures, verbose):
         station = Station(config.STATION)
         client = TCPClient(config.SERVER_HOST, config.SERVER_PORT)
         station_test = StationTest(station, client, tests, fixtures)
-        if station_test.run():
-            sys.exit(0)
+        while repeat > 0:
+            if not station_test.run():
+                break
+            repeat -= 1
+            if repeat <= 0:
+                sys.exit(0)
     except TCPConnectionError as ex:
         logger.error(ex.message)
     except Exception:
