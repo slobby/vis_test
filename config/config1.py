@@ -6,6 +6,5 @@ SERVER_HOST = 'localhost'
 SERVER_PORT = 5555
 
 # Station name
-# used for op
-# ening proper stations/station_name/description.csv file
-STATION = 'Phov'
+# used for opening proper stations/station_name/description.csv file
+STATION = 'Phov1'
