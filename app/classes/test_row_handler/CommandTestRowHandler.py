@@ -1,4 +1,3 @@
-from app.classes.TCPClient import TCPClient
 from app.classes.test_row_handler.AbstractTestRowHandler \
     import AbstractTestRowHandler
 from app.exceptions import BadResponsedMessageException, TCPConnectionError

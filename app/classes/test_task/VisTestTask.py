@@ -48,14 +48,14 @@ class VisTestTask(TestTask):
             message = f'{self.station.name}::{self.test_name}::\
 FAILED::Bad encoding in test file'
             self.write_report(self.test_report_path, message)
-            logger.error(message)
+            logger.info(message)
             print(f'{self.station.name}::{self.test_name}::\
 {Fore.RED}FAILED{Fore.WHITE}::Bad encoding in test file')
             return False
         except FailedTestException as ex:
             message = f'{self.station.name}::{self.test_name}::\
 FAILED:: line {line_no} [{line}]. {ex.message }'
-            logger.error(message)
+            logger.info(message)
             self.write_report(self.test_report_path, message)
             print(f'{self.station.name}::{self.test_name}::\
 {Fore.RED}FAILED{Fore.WHITE}::line {line_no} [{line}]. {ex.message}')

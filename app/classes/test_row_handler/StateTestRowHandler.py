@@ -1,4 +1,3 @@
-from app.classes.TCPClient import TCPClient
 from app.classes.color.Color import LayerColor
 from app.classes.test_row_handler.AbstractTestRowHandler \
     import AbstractTestRowHandler
@@ -121,7 +120,9 @@ in station.states for state [{state}]'
 objects [{self.test_task.station.objects[id_object]}] in \
 state [{state}] \
 for layer [{lr}] expected state \
-is [{self.test_task.station.states[id_object][state][lr]}], \
-got [{layers[lr]}]'
+is [{self.test_task.station.states[id_object][state][lr].blink_color}: \
+{self.test_task.station.states[id_object][state][lr].permanent_color}], \
+got [{layers[lr].blink_color}: \
+{layers[lr].permanent_color}]'
                 self.write_test_log_report(message)
                 raise BadResponsedMessageException(message)
