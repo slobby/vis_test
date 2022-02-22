@@ -57,10 +57,10 @@ class TestTask(ABC):
         head, _ = os.path.split(file_path)
         if not os.path.exists(head):
             os.makedirs(head)
-        with open(file_path, mode='a', encoding=TEST_ENCODING) as fs:
+        with open(file_path, mode='a+', encoding=TEST_ENCODING) as fs:
             time_stamp = datetime.now().isoformat(sep=' ',
                                                   timespec='milliseconds')
-            fs.write(f'[{time_stamp}] ; {message}\n')
+            fs.write(f'[{time_stamp}] - {message}\n')
 
     def clear_output_dir(self):
         if os.path.isfile(self.test_report_path):

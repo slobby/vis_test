@@ -43,6 +43,9 @@ class VisTestTask(TestTask):
                         row = line.split(TEST_FILE_SEP)
                         if row:
                             row = [item.strip(' \n') for item in row]
+                            message = f'Handle line [{line_no}::{line}]'
+                            logger.info(message)
+                            self.write_report(self.test_log_path, message)
                             waiter_handler.handle(row)
         except UnicodeDecodeError:
             message = f'{self.station.name}::{self.test_name}::\
