@@ -5,9 +5,8 @@ Logger module
 """
 
 import logging
-import os
 import sys
-from constants import PROTOCOL_CSV, VIS_TEST_VERBOSE, VIS_TEST_VERBOSE_YES
+from constants import PROTOCOL_CSV
 
 log_format: str = "%(asctime)s - [%(levelname)s] - %(name)s - \
 (%(filename)s:%(funcName)s:%(lineno)d) - %(message)s"
@@ -29,11 +28,8 @@ def get_stream_handler() -> logging.Handler:
     """
     create handler for writing into the stdout
     """
-    logging_level = logging.WARNING
     stream_handler = logging.StreamHandler(sys.stdout)
-    if os.environ.get(VIS_TEST_VERBOSE, 'NO') == VIS_TEST_VERBOSE_YES:
-        logging_level = logging.INFO
-    stream_handler.setLevel(logging_level)
+    stream_handler.setLevel(logging.WARNING)
     stream_handler.setFormatter(logging.Formatter(log_format))
     return stream_handler
 

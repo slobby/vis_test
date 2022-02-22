@@ -20,9 +20,11 @@ class StateTestRowHandler(AbstractTestRowHandler):
             try:
                 message = self.get_message_from_row(row)
                 self.test_task.client.send(message)
-                self.write_test_log_report(f'Send message [{message}]')
+                self.test_task.write_test_log_report(
+                    f'Send message [{message}]')
                 response = self.test_task.client.receive()
-                self.write_test_log_report(f'Receive message [{response}]')
+                self.test_task.write_test_log_report(
+                    f'Receive message [{response}]')
                 self.check_response(response, row)
             except (BadResponsedMessageException,
                     BadSendMessageException, TCPConnectionError) as ex:
@@ -44,16 +46,16 @@ class StateTestRowHandler(AbstractTestRowHandler):
         else:
             message = f'ERROR! Couldn`t find object [{alias_object}] \
 in station model [{self.test_task.station.name}]'
-            self.write_test_log_report(message)
+            self.test_task.write_test_log_report(message)
             raise BadSendMessageException(message)
         if id_object not in self.test_task.station.states:
             message = f'ERROR! Couldn`t object [{alias_object}] in states'
-            self.write_test_log_report(message)
+            self.test_task.write_test_log_report(message)
             raise BadSendMessageException(message)
         if (state not in self.test_task.station.states[id_object]):
             message = f'ERROR! Couldn`t find state [{state}] for object [{alias_object}] \
 in station model [{self.test_task.station.name}]'
-            self.write_test_log_report(message)
+            self.test_task.write_test_log_report(message)
             raise BadSendMessageException(message)
         return f'{GET_PREFIX}:{id_object}:{name_object}'
 
@@ -63,7 +65,7 @@ in station model [{self.test_task.station.name}]'
         if response == RESPONSE_ERROR_ANSWER or \
                 response.endswith(RESPONSE_NO_ANSWER):
             message = f'ERROR! Got bad responce [{response}]'
-            self.write_test_log_report(message)
+            self.test_task.write_test_log_report(message)
             raise BadResponsedMessageException(message)
         response_items = response.split(':')
         id_object = int(response_items[0])
@@ -84,7 +86,7 @@ in station model [{self.test_task.station.name}]'
             else:
                 message = f'ERROR! Got wrong amount of \
 object`s colors [{len(items)}]'
-                self.write_test_log_report(message)
+                self.test_task.write_test_log_report(message)
                 raise BadResponsedMessageException(message)
 
             for color, value in self.test_task.station.colors.items():
@@ -98,7 +100,7 @@ object`s colors [{len(items)}]'
             if not permanent_color or not blink_color:
                 message = f'ERROR! Couldn`t find color [{id_permanent_color}] \
  or [{id_blink_color}] in station.colors'
-                self.write_test_log_report(message)
+                self.test_task.write_test_log_report(message)
                 raise BadResponsedMessageException(message)
 
             layer_color = LayerColor(blink_color, permanent_color)
@@ -106,13 +108,13 @@ object`s colors [{len(items)}]'
         if id_object not in self.test_task.station.states:
             message = f'ERROR! Couldn`t find object [{id_object}] \
 in station.objects'
-            self.write_test_log_report(message)
+            self.test_task.write_test_log_report(message)
             raise BadResponsedMessageException(message)
         for lr in self.test_task.station.states[id_object][state]:
             if lr not in layers:
                 message = f'ERROR! Couldn`t find layer [{lr}] \
 in station.states for state [{state}]'
-                self.write_test_log_report(message)
+                self.test_task.write_test_log_report(message)
                 raise BadResponsedMessageException(message)
             if layers[lr] != (
                     self.test_task.station.states[id_object][state][lr]):
@@ -124,5 +126,5 @@ is [{self.test_task.station.states[id_object][state][lr].blink_color}: \
 {self.test_task.station.states[id_object][state][lr].permanent_color}], \
 got [{layers[lr].blink_color}: \
 {layers[lr].permanent_color}]'
-                self.write_test_log_report(message)
+                self.test_task.write_test_log_report(message)
                 raise BadResponsedMessageException(message)

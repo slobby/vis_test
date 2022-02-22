@@ -4,11 +4,19 @@
 
 - [VIS_tester](#vis_tester)
   - [Сontent](#сontent)
+    - [The stucture what you need to know](#the-stucture-what-you-need-to-know)
   - [How to config](#how-to-config)
+    - [File config/config[N].py](#file-configconfignpy)
+    - [File config/default_description.csv](#file-configdefault_descriptioncsv)
+    - [File stations/STATION/description.csv](#file-stationsstationdescriptioncsv)
+    - [File stations/STATION/\*\*/test\*.csv](#file-stationsstationtestcsv)
   - [How to use](#how-to-use)
   - [Requirements](#requirements)
+      - [Windows](#windows)
+      - [Linux](#linux)
   - [CLI command](#cli-command)
   - [See the results](#see-the-results)
+    - [Directory output](#directory-output)
   - [See log](#see-log)
 
 ### The stucture what you need to know
@@ -103,11 +111,13 @@ run `pyp install -r requirements.txt`
 Usage: start.py [OPTIONS]
 
 Options:
-  -c, --config TEXT   Config file name.
-  -t, --test TEXT     Test file name in station folder. Can be multiple.
-  -f, --fixture TEXT  Test file execuded before every test file.
-  -v, --verbose       Show more info.
-  --help              Show this message and exit.
+  -c, --config TEXT     Config file name.
+  -t, --test TEXT       Test files name in station folder. Can be multiple.
+  -f, --fixture TEXT    Test files executed after every failed test. Can be
+                        multiple.
+  -r, --repeat INTEGER  Set repeat tests (if they are succsseful).
+  -v, --verbose         Show more info.
+  --help                Show this message and exit.
 ```
 
 ## See the results

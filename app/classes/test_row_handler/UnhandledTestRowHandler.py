@@ -8,5 +8,5 @@ class UnhendledTestRowHandler(AbstractTestRowHandler):
     def handle(self,
                row: list[str]) -> None:
         message = f'ERROR! Couldn`t parse input string [{row}]'
-        self.write_test_log_report(message)
+        self.test_task.write_test_log_report(message)
         raise FailedTestException(message)

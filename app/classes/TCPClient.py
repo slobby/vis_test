@@ -31,14 +31,14 @@ class TCPClient():
 
     def _reconnect(self):
         try:
-            while(not self._is_connected() and
-                  self._con_attempts > 0):
-                time.sleep(0.5)
-                if self._sock:
-                    self.close()
+            if (self._con_attempts > 0):
+                if (not self._is_connected()):
+                    time.sleep(0.5)
+                    if self._sock:
+                        self.close()
                     self._create()
-                self._sock.connect((self._host, self._port))
-            if self._con_attempts <= 0:
+                    self._sock.connect((self._host, self._port))
+            else:
                 raise TCPConnectionError()
         except TCPConnectionError:
             raise TCPConnectionError(f'ERROR! Couldn`t establish a connection \

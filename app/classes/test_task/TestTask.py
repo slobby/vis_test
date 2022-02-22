@@ -5,6 +5,7 @@ from app.classes.TCPClient import TCPClient
 
 from app.classes.station.Station import Station
 from constants import CONV_COMMENT, OUTPUT_DIR, TEST_ENCODING
+from constants import VIS_TEST_VERBOSE, VIS_TEST_VERBOSE_YES
 
 
 class TestTask(ABC):
@@ -58,9 +59,21 @@ class TestTask(ABC):
         if not os.path.exists(head):
             os.makedirs(head)
         with open(file_path, mode='a+', encoding=TEST_ENCODING) as fs:
-            time_stamp = datetime.now().isoformat(sep=' ',
-                                                  timespec='milliseconds')
-            fs.write(f'[{time_stamp}] - {message}\n')
+            fs.write(message)
+
+    def write_test_log_report(self, message: str) -> None:
+        time_stamp = datetime.now().isoformat(sep=' ',
+                                              timespec='milliseconds')
+        message_to_write = f'[{time_stamp}] - {message}'
+        self.write_report(self.test_log_path, message_to_write + '\n')
+        if (os.environ.get(VIS_TEST_VERBOSE, 'NO') == VIS_TEST_VERBOSE_YES):
+            print(message_to_write)
+
+    def write_test_report(self, message: str) -> None:
+        time_stamp = datetime.now().isoformat(sep=' ',
+                                              timespec='milliseconds')
+        message_to_write = f'[{time_stamp}] - {message}\n'
+        self.write_report(self.test_report_path, message_to_write)
 
     def clear_output_dir(self):
         if os.path.isfile(self.test_report_path):

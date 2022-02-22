@@ -62,7 +62,7 @@ class StationTest:
         result = True
         fixture_result = True
         print('\n============== test session stats ==============')
-        print(f'station {Fore.CYAN}{self.name}')
+        print(f'station {Fore.CYAN}{Style.BRIGHT}{self.name}')
         print(f'{Style.BRIGHT}collected {len(self.test_tasks)} items\n')
 
         for test_task in self.test_tasks:
@@ -77,6 +77,8 @@ class StationTest:
             if not fixture_result:
                 break
         print('\n===================== REPORT ===================')
-        print(f'{Fore.GREEN}PASSED:{Style.BRIGHT}{success}')
-        print(f'{Fore.RED}FAILED:{Style.BRIGHT}{len(self.test_tasks)-success}')
+        if success:
+            print(f'{Fore.GREEN}PASSED:{success}')
+        if (len(self.test_tasks)-success > 0):
+            print(f'{Fore.RED}FAILED:{len(self.test_tasks)-success}')
         return result

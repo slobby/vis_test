@@ -3,10 +3,16 @@ import sys
 from colorama import init
 import click
 from importlib.util import module_from_spec, spec_from_file_location
+from app.classes.TCPClient import TCPClient
+from app.classes.station.Station import Station
+from app.classes.station_test.StationTest import StationTest
+from app.exceptions import TCPConnectionError
 
 from constants import CONFIG, VIS_TEST_VERBOSE, VIS_TEST_VERBOSE_YES
+from logger import get_logger
 
 init(autoreset=True)
+logger = get_logger(__name__)
 
 
 @click.command()
@@ -18,19 +24,14 @@ init(autoreset=True)
               help='Test files executed after every failed test. \
 Can be multiple.')
 @click.option('-r', '--repeat', 'repeat', default=1,
-              help='Set repeat tests (if they are succssesful).')
+              help='Set repeat tests (if they are succsseful).')
 @click.option('-v', '--verbose', is_flag=True,
               help='Show more info.')
 def main(config_file, tests, fixtures, repeat, verbose):
+    success = False
     if verbose:
         os.environ[VIS_TEST_VERBOSE] = VIS_TEST_VERBOSE_YES
-    from app.classes.TCPClient import TCPClient
-    from app.classes.station.Station import Station
-    from app.classes.station_test.StationTest import StationTest
-    from app.exceptions import TCPConnectionError
 
-    from logger import get_logger
-    logger = get_logger(__name__)
     try:
         config = get_config_module(config_file)
         station = Station(config.STATION)
@@ -40,13 +41,19 @@ def main(config_file, tests, fixtures, repeat, verbose):
             if not station_test.run():
                 break
             repeat -= 1
-            if repeat <= 0:
-                sys.exit(0)
+        else:
+            success = True
     except TCPConnectionError as ex:
         logger.error(ex.message)
     except Exception:
         logger.error('ERROR! Unhandled exception', exc_info=True)
-    sys.exit(1)
+    finally:
+        client.close()
+
+    if success:
+        sys.exit(0)
+    else:
+        sys.exit(1)
 
 
 def get_config_module(config_file: str):

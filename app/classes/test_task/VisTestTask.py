@@ -43,28 +43,35 @@ class VisTestTask(TestTask):
                         row = line.split(TEST_FILE_SEP)
                         if row:
                             row = [item.strip(' \n') for item in row]
-                            message = f'Handle line [{line_no}::{line}]'
+                            message = f'Handle line {line_no} [{line}]'
                             logger.info(message)
-                            self.write_report(self.test_log_path, message)
+                            self.write_test_log_report(message)
                             waiter_handler.handle(row)
         except UnicodeDecodeError:
-            message = f'{self.station.name}::{self.test_name}::\
-FAILED::Bad encoding in test file'
-            self.write_report(self.test_report_path, message)
+            # write message if failed due bad encoding
+            message = f'{self.test_path}::{self.test_name}::\
+FAILED:: Test file encoding is not utf-8'
+            message_colored = f'{self.test_path}::{self.test_name}::\
+{Fore.RED}FAILED'
             logger.info(message)
-            print(f'{self.station.name}::{self.test_name}::\
-{Fore.RED}FAILED{Fore.WHITE}::Bad encoding in test file')
+            self.write_test_report(message)
+            print(message_colored)
             return False
         except FailedTestException as ex:
-            message = f'{self.station.name}::{self.test_name}::\
+            # write message if failed
+            message = f'{self.test_path}::{self.test_name}::\
 FAILED:: line {line_no} [{line}]. {ex.message }'
+            message_colored = f'{self.test_path}::{self.test_name}::\
+{Fore.RED}FAILED'
             logger.info(message)
-            self.write_report(self.test_report_path, message)
-            print(f'{self.station.name}::{self.test_name}::\
-{Fore.RED}FAILED{Fore.WHITE}::line {line_no} [{line}]. {ex.message}')
+            self.write_test_report(message)
+            print(message_colored)
             return False
         else:
-            message = f'{self.test_name}:: {Fore.GREEN}PASSED'
-            self.write_report(self.test_report_path, message)
-            print(message)
+            # write message if success
+            message = f'{self.test_path}::{self.test_name}::PASSED'
+            message_colored = f'{self.test_path}::{self.test_name}::\
+{Fore.GREEN}PASSED'
+            self.write_test_report(message)
+            print(message_colored)
             return True

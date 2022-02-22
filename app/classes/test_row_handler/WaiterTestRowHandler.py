@@ -16,7 +16,7 @@ class WaiterTestRowHandler(AbstractTestRowHandler):
         if len(row) == 1 and row[0].isdigit():
             message = f'Wait {row[0]} seconds'
             logger.info(message)
-            self.write_test_log_report(message)
+            self.test_task.write_test_log_report(message)
             time.sleep(int(row[0]))
             return
         elif self.next_handler:

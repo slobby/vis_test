@@ -19,9 +19,11 @@ class CommandTestRowHandler(AbstractTestRowHandler):
             try:
                 message = self.get_message_from_row(row)
                 self.test_task.client.send(message)
-                self.write_test_log_report(f'Send message [{message}]')
+                self.test_task.write_test_log_report(
+                    f'Send message [{message}]')
                 response = self.test_task.client.receive()
-                self.write_test_log_report(f'Receive message [{response}]')
+                self.test_task.write_test_log_report(
+                    f'Receive message [{response}]')
                 self.check_response(response, message)
             except (BadResponsedMessageException,
                     BadSendMessageException, TCPConnectionError) as ex:
@@ -45,11 +47,11 @@ class CommandTestRowHandler(AbstractTestRowHandler):
         else:
             message = f'ERROR! Couldn`t find object [{alias_object}] \
 in station model [{self.test_task.station.name}]'
-            self.write_test_log_report(message)
+            self.test_task.write_test_log_report(message)
             raise BadSendMessageException(message)
         if type_command not in '012':
             message = f'ERROR! Wrong command type [{type_command}]'
-            self.write_test_log_report(message)
+            self.test_task.write_test_log_report(message)
             raise BadSendMessageException(message)
         return f'{CMD_PREFIX}:{id_object}:\
 {name_object}:{name_command}:{type_command}'
@@ -62,5 +64,5 @@ in station model [{self.test_task.station.name}]'
         if (response != excpected_response):
             message = f'ERROR! Bad response on command [{request}]. \
 Expected [{excpected_response}], got [{response}]'
-            self.write_test_log_report(message)
+            self.test_task.write_test_log_report(message)
             raise BadResponsedMessageException(message)
