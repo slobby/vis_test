@@ -14,21 +14,24 @@ logger = get_logger(__name__)
 class CommandTestRowHandler(AbstractTestRowHandler):
 
     def handle(self,
-               row: list[str],
-               client: TCPClient) -> None:
+               row: list[str]) -> None:
 
         if len(row) == 3 or len(row) == 4:
             try:
                 message = self.get_message_from_row(row)
-                client.send(message)
-                response = client.receive()
+                self.test_task.client.send(message)
+                self.write_test_log_report(f'Send message [{message}]')
+                response = self.test_task.client.receive()
+                self.write_test_log_report(f'Receive message [{response}]')
                 self.check_response(response, message)
             except (BadResponsedMessageException,
                     BadSendMessageException, TCPConnectionError) as ex:
                 raise FailedTestException(ex.message)
+        elif self.next_handler:
+            self.next_handler.handle(row)
         else:
-            self.next_handler.handle(
-                row, client)
+            message = 'No next handler'
+            FailedTestException(message)
 
     def get_message_from_row(self, row: list[str]) -> str:
         alias_object = row[0]
