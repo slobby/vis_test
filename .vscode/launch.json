@@ -9,7 +9,7 @@
       "type": "python",
       "request": "launch",
       "program": "start.py",
-      "args": ["-t", "routers/test_X_N2", "-f", "reloads/reload_X", "-v"],
+      "args": ["-c", "config1"],
       "console": "integratedTerminal"
     }
   ]

@@ -30,9 +30,9 @@ class StationTest:
 
     def create_tests_paths(self, tests_paths=None) -> list[str]:
         if tests_paths:
-            return list(filter(os.path.exists, [
+            return sorted(list(filter(os.path.exists, [
                 os.path.join(self.root_dir, test_path + '.csv')
-                for test_path in tests_paths]))
+                for test_path in tests_paths])))
         else:
             raw_list = [list(zip([root]*len(files), files))
                         for root, _, files in os.walk(self.root_dir)]
