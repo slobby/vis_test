@@ -80,3 +80,9 @@ class TestTask(ABC):
             os.remove(self.test_report_path)
         if os.path.isfile(self.test_log_path):
             os.remove(self.test_log_path)
+
+    def write_progress_bar(self, message: str) -> None:
+        if (os.environ.get(VIS_TEST_VERBOSE, 'NO') != VIS_TEST_VERBOSE_YES):
+            print('\033[2K', end='\r', flush=True)
+            print(f'{self.test_path}::{self.test_name}::', end='', flush=True)
+            print(f'\033[33m{message}', end='\r', flush=True)

@@ -29,17 +29,35 @@ class StationTest:
         self.fixtures_tasks = self.create_fixtures()
 
     def create_tests_paths(self, tests_paths=None) -> list[str]:
-        if tests_paths:
-            return sorted(list(filter(os.path.exists, [
-                os.path.join(self.root_dir, test_path + '.csv')
-                for test_path in tests_paths])))
-        else:
-            raw_list = [list(zip([root]*len(files), files))
-                        for root, _, files in os.walk(self.root_dir)]
-            flatten_raw_list = sum(raw_list, [])
-            return [os.path.join(folder, file)
-                    for folder, file in flatten_raw_list
-                    if file.startswith('test')]
+        if not tests_paths:
+            tests_paths = ['']
+
+        tepm_dir_tests_paths = []
+        tepm_tests_paths = []
+
+        for elem_path in tests_paths:
+            candidate_path = os.path.join(self.root_dir, elem_path)
+            if os.path.isdir(candidate_path):
+                tepm_dir_tests_paths.\
+                    extend(list(zip([root]*len(files), files))
+                           for root, _, files in os.walk(candidate_path))
+            else:
+                candidate_path += '.csv'
+                if os.path.exists(candidate_path):
+                    tepm_tests_paths.append(candidate_path)
+        if tepm_dir_tests_paths:
+            flatten_raw_list = sum(tepm_dir_tests_paths, [])
+            tepm_tests_paths.extend(os.path.join(folder, file)
+                                    for folder, file in flatten_raw_list
+                                    if file.startswith('test'))
+        return sorted(tepm_tests_paths)
+        # else:
+        #     raw_list = [list(zip([root]*len(files), files))
+        #                 for root, _, files in os.walk(self.root_dir)]
+        #     flatten_raw_list = sum(raw_list, [])
+        #     return sorted([os.path.join(folder, file)
+        #                    for folder, file in flatten_raw_list
+        #                    if file.startswith('test')])
 
     def create_fixtures_paths(self, fixtures_paths=None) -> list[str]:
         if fixtures_paths:

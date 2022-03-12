@@ -19,7 +19,7 @@ logger = get_logger(__name__)
 @click.option('-c', '--config', 'config_file', default='config',
               help='Config file name.')
 @click.option('-t', '--test', 'tests', multiple=True,
-              help='Test files name in station folder. Can be multiple.')
+              help='Test file/folder name in station folder. Can be multiple.')
 @click.option('-f', '--fixture', 'fixtures', multiple=True,
               help='Test files executed after every failed test. \
 Can be multiple.')
@@ -28,7 +28,8 @@ Can be multiple.')
 @click.option('-v', '--verbose', is_flag=True,
               help='Show more info.')
 def main(config_file, tests, fixtures, repeat, verbose):
-    success = False
+    success_all_tests = False
+    client = None
     if verbose:
         os.environ[VIS_TEST_VERBOSE] = VIS_TEST_VERBOSE_YES
 
@@ -42,15 +43,16 @@ def main(config_file, tests, fixtures, repeat, verbose):
                 break
             repeat -= 1
         else:
-            success = True
+            success_all_tests = True
     except TCPConnectionError as ex:
         logger.error(ex.message)
     except Exception:
         logger.error('ERROR! Unhandled exception', exc_info=True)
     finally:
-        client.close()
+        if client:
+            client.close()
 
-    if success:
+    if success_all_tests:
         sys.exit(0)
     else:
         sys.exit(1)

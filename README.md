@@ -112,13 +112,24 @@ Usage: start.py [OPTIONS]
 
 Options:
   -c, --config TEXT     Config file name.
-  -t, --test TEXT       Test files name in station folder. Can be multiple.
+  -t, --test TEXT       Test file/folder name in station folder. Can be
+                        multiple.
   -f, --fixture TEXT    Test files executed after every failed test. Can be
                         multiple.
   -r, --repeat INTEGER  Set repeat tests (if they are succsseful).
   -v, --verbose         Show more info.
   --help                Show this message and exit.
 ```
+
+| Option | Description                                                             | Example                         |
+| ------ | ----------------------------------------------------------------------- | ------------------------------- |
+| -c     | The name of config file in folder config                                | -c config2                      |
+| -t     | Test file/folder name in station folder. Can be multiple                | -t 1_switches                   |
+|        | If you set folder. Only files starts with 'test' prefix will be handled | -t 2_routes\N1                  |
+|        | You can set any file name.                                              | -t 2_routes\N1\extra_ttest      |
+| -f     | Test files executed after every failed test. Can be multiple            | -f fixtures\reset\reset_bottoms |
+| -r     | Set repeat tests (if they are succsseful)                               | -r 2                            |
+| -v     | Show info about each action                                             | -v                              |
 
 ## See the results
 

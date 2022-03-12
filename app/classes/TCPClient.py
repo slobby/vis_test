@@ -44,6 +44,9 @@ class TCPClient():
             raise TCPConnectionError(f'ERROR! Couldn`t establish a connection \
 on {self._host}, {self._port} in {CON_ATTEMPTS} attempts')
         except (ConnectionRefusedError, socket.timeout):
+            logger.warning(
+                f'Couldn`t establish a connection \
+on {self._host}, {self._port} during {self._con_attempts} attempt')
             if self._con_attempts > 0:
                 self._con_attempts -= 1
                 self._reconnect()

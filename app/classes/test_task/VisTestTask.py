@@ -34,6 +34,7 @@ class VisTestTask(TestTask):
         waiter_handler.set_next(command_handler)
         command_handler.set_next(state_handler)
         state_handler.set_next(UnhendledTestRowHandler(self))
+        result = False
         try:
             with open(self.test_path, mode='r', encoding=TEST_ENCODING) as fs:
                 for line_no, raw_line in enumerate(fs, start=1):
@@ -46,6 +47,7 @@ class VisTestTask(TestTask):
                             message = f'Handle line {line_no} [{line}]'
                             logger.info(message)
                             self.write_test_log_report(message)
+                            self.write_progress_bar(message)
                             waiter_handler.handle(row)
         except UnicodeDecodeError:
             # write message if failed due bad encoding
@@ -64,14 +66,15 @@ FAILED:: line {line_no} [{line}]. {ex.message }'
             message_colored = f'{self.test_path}::{self.test_name}::\
 {Fore.RED}FAILED'
             logger.info(message)
-            self.write_test_report(message)
-            print(message_colored)
-            return False
+            result = False
         else:
             # write message if success
             message = f'{self.test_path}::{self.test_name}::PASSED'
             message_colored = f'{self.test_path}::{self.test_name}::\
 {Fore.GREEN}PASSED'
-            self.write_test_report(message)
-            print(message_colored)
-            return True
+            result = True
+
+        self.write_test_report(message)
+        print('\033[2K', end='\r', flush=True)
+        print(message_colored)
+        return result
