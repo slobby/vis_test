@@ -32,7 +32,7 @@ class CommandTestRowHandler(AbstractTestRowHandler):
             self.next_handler.handle(row)
         else:
             message = 'No next handler'
-            FailedTestException(message)
+            raise FailedTestException(message)
 
     def get_message_from_row(self, row: list[str]) -> str:
         alias_object = row[0]

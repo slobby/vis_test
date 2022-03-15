@@ -2,14 +2,10 @@ from colorama import Fore
 from app.classes.TCPClient import TCPClient
 
 from app.classes.station.Station import Station
-from app.classes.test_row_handler.CommandTestRowHandler \
-    import CommandTestRowHandler
-from app.classes.test_row_handler.StateTestRowHandler \
-    import StateTestRowHandler
-from app.classes.test_row_handler.UnhandledTestRowHandler \
-    import UnhendledTestRowHandler
-from app.classes.test_row_handler.WaiterTestRowHandler \
-    import WaiterTestRowHandler
+from app.classes.test_row_handler.CommandTestRowHandler import CommandTestRowHandler
+from app.classes.test_row_handler.StateTestRowHandler import StateTestRowHandler
+from app.classes.test_row_handler.UnhandledTestRowHandler import UnhendledTestRowHandler
+from app.classes.test_row_handler.WaiterTestRowHandler import WaiterTestRowHandler
 from app.classes.test_task.TestTask import TestTask
 from app.exceptions import FailedTestException
 from constants import CONV_COMMENT, TEST_ENCODING, TEST_FILE_SEP
@@ -44,36 +40,29 @@ class VisTestTask(TestTask):
                         row = line.split(TEST_FILE_SEP)
                         if row:
                             row = [item.strip(' \n') for item in row]
-                            message = f'Handle line {line_no} [{line}]'
+                            message = f'Line {line_no} [ {line} ]'
                             logger.info(message)
                             self.write_test_log_report(message)
                             self.write_progress_bar(message)
                             waiter_handler.handle(row)
         except UnicodeDecodeError:
             # write message if failed due bad encoding
-            message = f'{self.test_path}::{self.test_name}::\
-FAILED:: Test file encoding is not utf-8'
-            message_colored = f'{self.test_path}::{self.test_name}::\
-{Fore.RED}FAILED'
-            logger.info(message)
-            self.write_test_report(message)
-            print(message_colored)
-            return False
+            message = f'{self.test_path}::{self.test_name}::FAILED:: Test file encoding is not utf-8'
+            message_colored = f'{self.test_path}::{self.test_name}::{Fore.RED}FAILED'
+            result = False
         except FailedTestException as ex:
             # write message if failed
-            message = f'{self.test_path}::{self.test_name}::\
-FAILED:: line {line_no} [{line}]. {ex.message }'
-            message_colored = f'{self.test_path}::{self.test_name}::\
-{Fore.RED}FAILED'
-            logger.info(message)
+            message = f'{self.test_path}::{self.test_name}::FAILED:: line {line_no} [{line}]. {ex.message }'
+            message_colored = f'{self.test_path}::{self.test_name}::{Fore.RED}FAILED'
             result = False
         else:
             # write message if success
             message = f'{self.test_path}::{self.test_name}::PASSED'
-            message_colored = f'{self.test_path}::{self.test_name}::\
-{Fore.GREEN}PASSED'
+            message_colored = f'{self.test_path}::{self.test_name}::{Fore.GREEN}PASSED'
             result = True
 
+        if not result:
+            logger.info(message)
         self.write_test_report(message)
         print('\033[2K', end='\r', flush=True)
         print(message_colored)

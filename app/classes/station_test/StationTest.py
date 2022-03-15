@@ -1,3 +1,4 @@
+import datetime
 import os
 from app.classes.TCPClient import TCPClient
 from app.classes.test_task.VisTestTask import TestTask, VisTestTask
@@ -79,10 +80,11 @@ class StationTest:
         success = 0
         result = True
         fixture_result = True
-        print('\n============== test session stats ==============')
+        print('\n===================== test session stats =====================')
         print(f'station {Fore.CYAN}{Style.BRIGHT}{self.name}')
         print(f'{Style.BRIGHT}collected {len(self.test_tasks)} items\n')
 
+        start_time = datetime.datetime.now()
         for test_task in self.test_tasks:
             if not test_task.run():
                 result = False
@@ -94,7 +96,9 @@ class StationTest:
                 success += 1
             if not fixture_result:
                 break
-        print('\n===================== REPORT ===================')
+        elapsed_time = datetime.datetime.now() - start_time
+        print(
+            f'\n===================== REPORT in {elapsed_time.total_seconds():.2f} sec =====================')
         if success:
             print(f'{Fore.GREEN}PASSED:{success}')
         if (len(self.test_tasks)-success > 0):

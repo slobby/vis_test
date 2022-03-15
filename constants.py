@@ -73,3 +73,6 @@ VIS_TEST_VERBOSE = "VIS_TEST_VERBOSE"
 
 # Enable verbose mode
 VIS_TEST_VERBOSE_YES = "YES"
+
+# default waiting time
+DELTA_TIME = 60

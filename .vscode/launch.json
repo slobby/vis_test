@@ -9,7 +9,7 @@
       "type": "python",
       "request": "launch",
       "program": "start.py",
-      "args": ["-c", "config1"],
+      "args": ["-c", "config1", "-t", "1_switches\\1"],
       "console": "integratedTerminal"
     }
   ]

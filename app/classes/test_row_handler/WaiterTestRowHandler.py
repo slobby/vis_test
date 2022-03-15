@@ -23,4 +23,4 @@ class WaiterTestRowHandler(AbstractTestRowHandler):
             self.next_handler.handle(row)
         else:
             message = 'No next handler'
-            FailedTestException(message)
+            raise FailedTestException(message)
