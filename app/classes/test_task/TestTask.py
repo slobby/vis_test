@@ -11,17 +11,17 @@ from constants import VIS_TEST_VERBOSE, VIS_TEST_VERBOSE_YES
 class TestTask(ABC):
     test_path: str
     station: Station
-    name: str
+    clients: dict[TCPClient]
     test_report_path: str
     test_log_path: str
 
     def __init__(self,
                  test_path: str,
                  station: Station,
-                 client: TCPClient) -> None:
+                 clients: dict[TCPClient]) -> None:
         self.test_path = test_path
         self.station = station
-        self.client = client
+        self.clients = clients
         self.test_name = self.get_test_name()
         self.test_report_path = self.get_test_report_path()
         self.test_log_path = self.get_test_log_path()

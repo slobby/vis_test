@@ -1,8 +1,11 @@
 import socket
 import time
+from types import ModuleType
 from app.exceptions import TCPConnectionError
 from constants import CODE_PAGE, CON_ATTEMPTS, TIMEOUT
 from logger import get_logger
+
+__all__ = ['TCPClient', 'Clients']
 
 logger = get_logger(__name__)
 
@@ -92,3 +95,27 @@ message [{response}]')
             raise TCPConnectionError(
                 f'ERROR! Couldn`t recieve message \
 from {self._host}, {self._port}')
+
+
+class Clients():
+    _clients: dict[TCPClient]
+    _default_client_name: str
+
+    def __init__(self, config: ModuleType):
+        if config.CLIENTS:
+            self._clients = {key: TCPClient(*value)
+                             for key, value in config.CLIENTS.items()}
+        else:
+            self._clients = {config.CLIENT_ID: TCPClient(
+                config.CLIENT_HOST, config.CLIENT_PORT)}
+        self._default_client_name = config.CLIENT_ID
+
+    def get_by_name(self, name: str = None) -> TCPClient:
+        if name is None:
+            return self._clients[self._default_client_name]
+        if name in self._clients:
+            return self._clients[name]
+        message = f'ERROR! Couldn`t find object [{alias_object}] \
+in station model [{self.test_task.station.name}]'
+        self.test_task.write_test_log_report(message)
+        raise BadSendMessageException(message)

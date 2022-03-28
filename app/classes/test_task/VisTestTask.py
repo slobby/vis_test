@@ -20,8 +20,8 @@ class VisTestTask(TestTask):
     def __init__(self,
                  test_path: str,
                  station: Station,
-                 client: TCPClient) -> None:
-        super().__init__(test_path, station, client)
+                 clients: dict[TCPClient]) -> None:
+        super().__init__(test_path, station, clients)
 
     def run(self) -> bool:
         waiter_handler = WaiterTestRowHandler(self)

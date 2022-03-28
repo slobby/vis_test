@@ -1,5 +1,6 @@
 import os
 import sys
+from types import ModuleType
 from colorama import init
 import click
 from importlib.util import module_from_spec, spec_from_file_location
@@ -36,8 +37,8 @@ def main(config_file, tests, fixtures, repeat, verbose):
     try:
         config = get_config_module(config_file)
         station = Station(config.STATION)
-        client = TCPClient(config.SERVER_HOST, config.SERVER_PORT)
-        station_test = StationTest(station, client, tests, fixtures)
+        clients = get_TCP_clients(config)
+        station_test = StationTest(station, clients, tests, fixtures)
         while repeat > 0:
             if not station_test.run():
                 break
@@ -65,6 +66,16 @@ def get_config_module(config_file: str):
     config = module_from_spec(spec)
     spec.loader.exec_module(config)
     return config
+
+
+def get_TCP_clients(config: ModuleType) -> dict[TCPClient]:
+    if config.CLIENTS:
+        clients = {key: TCPClient(*value)
+                   for key, value in config.CLIENTS.items()}
+    else:
+        clients = {config.CLIENT_ID: TCPClient(
+            config.CLIENT_HOST, config.CLIENT_PORT)}
+    return clients
 
 
 if __name__ == '__main__':

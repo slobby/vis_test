@@ -9,17 +9,21 @@ from colorama import Fore, Style
 
 class StationTest:
     station: Station
+    clients: dict[TCPClient]
+    name: str
+    root_dir: str
     tasks_path: list[str]
     test_tasks: list[TestTask]
+    fixtures_paths: list[str]
     fixtures_tasks: list[TestTask]
 
     def __init__(self,
                  station: Station,
-                 client: TCPClient,
+                 clients: TCPClient,
                  tests_paths=None,
                  fixtures_paths=None) -> None:
         self.station = station
-        self.client = client
+        self.clients = clients
         self.name = station.name
         self.root_dir = os.path.join(os.getcwd(),
                                      SOURCE_DESC_DIR,
@@ -69,11 +73,11 @@ class StationTest:
             return list()
 
     def create_tasks(self) -> list[TestTask]:
-        return [VisTestTask(task_path, self.station, self.client)
+        return [VisTestTask(task_path, self.station, self.clients)
                 for task_path in self.tasks_path]
 
     def create_fixtures(self) -> list[TestTask]:
-        return [VisTestTask(task_path, self.station, self.client)
+        return [VisTestTask(task_path, self.station, self.clients)
                 for task_path in self.fixtures_paths]
 
     def run(self) -> bool:
