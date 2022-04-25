@@ -8,7 +8,7 @@ import logging
 import sys
 from constants import PROTOCOL_CSV
 
-log_format: str = "%(asctime)s - [%(levelname)s] - %(name)s - \
+log_format: str = "\n%(asctime)s - [%(levelname)s] - %(name)s - \
 (%(filename)s:%(funcName)s:%(lineno)d) - %(message)s"
 
 
