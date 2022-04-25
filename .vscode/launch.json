@@ -9,7 +9,15 @@
       "type": "python",
       "request": "launch",
       "program": "start.py",
-      "args": ["-c", "config1", "-t", "1_switches\\1"],
+      "args": [
+        "-c",
+        "config2",
+        "-t",
+        "1_switches\\1\\test_1_1_+_free",
+        "-s",
+        "Success\\success",
+        "-v"
+      ],
       "console": "integratedTerminal"
     }
   ]

@@ -10,10 +10,9 @@ CLIENT_PORT = 5555
 
 # Dictionary of clients
 
-clients = {
+CLIENTS = {
     CLIENT_ID: (CLIENT_HOST, CLIENT_PORT),
-
-
+    'Tестер': ('localhost', 5556)
 }
 
 # Station name

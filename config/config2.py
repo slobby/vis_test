@@ -2,20 +2,21 @@
 CLIENT_ID = 'ДНЦ'
 
 # Default visualisation host IP address
-CLIENT_HOST = '10.23.101.167'
+CLIENT_HOST = 'localhost'
 
 # Default visualisation host TCP port
 # hex or dec are allowed
-CLIENT_PORT = 5556
+CLIENT_PORT = 5555
 
 # Dictionary of clients
 
 CLIENTS = {
     CLIENT_ID: (CLIENT_HOST, CLIENT_PORT),
+    'ТЕСТ': ('localhost', 5556)
     # 'ШН': ('localhost',5555),
 }
 
 # Station name
 # used for opening proper stations/station_name/description.csv file
 
-STATION = 'tester'
+STATION = 'Mozir'

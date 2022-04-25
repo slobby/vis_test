@@ -38,9 +38,6 @@ COLORS_SEP = ','
 # Code page for test files
 TEST_ENCODING = 'utf-8'
 
-# Separator for test files
-TEST_FILE_SEP = ':'
-
 # Log file path
 PROTOCOL_CSV = "log/log.csv"
 
@@ -52,6 +49,31 @@ TIMEOUT = 5
 
 # Amount of reconnecting attempts
 CON_ATTEMPTS = 5
+
+# Separator for marker
+MARKER_SEP = '::'
+
+# Separator for command
+COMMAND_SEP = ':'
+
+# Separator for response
+RESPONSE_SEP = ':'
+
+# Separator for params
+PARAM_SEP = ';'
+
+
+# visualisation marker
+MARKER_VIS = 'vis'
+
+# elapsed_time marker
+MARKER_ELAPSED_TIME = '?'
+
+# tester marker
+MARKER_TESTER = 'tester'
+
+# default waiting time
+DELTA_TIME = 60
 
 # Message command perifix
 CMD_PREFIX = 'CMD'
@@ -73,6 +95,3 @@ VIS_TEST_VERBOSE = "VIS_TEST_VERBOSE"
 
 # Enable verbose mode
 VIS_TEST_VERBOSE_YES = "YES"
-
-# default waiting time
-DELTA_TIME = 60
