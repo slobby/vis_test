@@ -1,10 +1,10 @@
-# Default visualisation ID
+# Default client ID
 CLIENT_ID = 'ДНЦ'
 
-# Default visualisation host IP address
+# Default client host IP address
 CLIENT_HOST = 'localhost'
 
-# Default visualisation host TCP port
+# Default client host TCP port
 # hex or dec are allowed
 CLIENT_PORT = 5555
 
